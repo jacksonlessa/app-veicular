@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 parallelizable: true
 blocked_by: ["1.0", "2.0"]
 ---
@@ -27,9 +27,9 @@ Instalar NextAuth.js e criar o handler da rota `/api/auth/[...nextauth]` com `pr
 
 ## Subtarefas
 
-- [ ] 4.1 `npm i next-auth`
-- [ ] 4.2 Criar `src/app/api/auth/[...nextauth]/route.ts`
-- [ ] 4.3 Validar resposta em `http://localhost:3000/api/auth/session`
+- [x] 4.1 `npm i next-auth`
+- [x] 4.2 Criar `src/app/api/auth/[...nextauth]/route.ts`
+- [x] 4.3 Validar resposta em `http://localhost:3000/api/auth/session`
 
 ## Detalhes de Implementação
 
