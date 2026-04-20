@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 parallelizable: false
 blocked_by: ["6.0", "2.0"]
 ---
@@ -28,9 +28,9 @@ Criar o componente `Logo` replicando o visual do protótipo (`docs/RodagemApp.ht
 
 ## Subtarefas
 
-- [ ] 7.1 Criar `src/components/ui/Logo.tsx` seguindo o protótipo (SVG inline ou `lucide-react`)
-- [ ] 7.2 Reescrever `src/app/page.tsx` com Logo + Button + título de boas-vindas
-- [ ] 7.3 Validar visualmente em `http://localhost:3000` contra o protótipo
+- [x] 7.1 Criar `src/components/ui/Logo.tsx` seguindo o protótipo (SVG inline ou `lucide-react`)
+- [x] 7.2 Reescrever `src/app/page.tsx` com Logo + Button + título de boas-vindas
+- [x] 7.3 Validar visualmente em `http://localhost:3000` contra o protótipo
 
 ## Detalhes de Implementação
 
