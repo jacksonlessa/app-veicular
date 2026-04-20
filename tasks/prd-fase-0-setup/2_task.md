@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 parallelizable: true
 blocked_by: ["1.0"]
 ---
@@ -26,11 +26,11 @@ Criar a árvore de diretórios da arquitetura Clean DDD definida no escopo (seç
 
 ## Subtarefas
 
-- [ ] 2.1 Criar `src/domain/.gitkeep`
-- [ ] 2.2 Criar `src/application/.gitkeep`
-- [ ] 2.3 Criar `src/infrastructure/database/.gitkeep`
-- [ ] 2.4 Criar `src/components/ui/.gitkeep`
-- [ ] 2.5 Criar `src/lib/.gitkeep`
+- [x] 2.1 Criar `src/domain/.gitkeep`
+- [x] 2.2 Criar `src/application/.gitkeep`
+- [x] 2.3 Criar `src/infrastructure/database/.gitkeep`
+- [x] 2.4 Criar `src/components/ui/.gitkeep`
+- [x] 2.5 Criar `src/lib/.gitkeep`
 
 ## Detalhes de Implementação
 
