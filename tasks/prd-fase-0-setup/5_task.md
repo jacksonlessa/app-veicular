@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 parallelizable: true
 blocked_by: ["1.0"]
 ---
@@ -28,11 +28,11 @@ Aplicar o design system do protótipo `docs/RodagemApp.html` (tema Âmbar): carr
 
 ## Subtarefas
 
-- [ ] 5.1 Ajustar `app/layout.tsx` para carregar `Plus_Jakarta_Sans` via `next/font/google`
-- [ ] 5.2 Setar `lang="pt-BR"` no `<html>` e aplicar a classe da fonte ao `<body>`
-- [ ] 5.3 Reescrever `src/app/globals.css` com `@import "tailwindcss"` e bloco `@theme` completo
-- [ ] 5.4 Definir `body { background: var(--color-bg); color: var(--color-text); }`
-- [ ] 5.5 Validar em DevTools que a fonte e cores Âmbar estão aplicadas
+- [x] 5.1 Ajustar `app/layout.tsx` para carregar `Plus_Jakarta_Sans` via `next/font/google`
+- [x] 5.2 Setar `lang="pt-BR"` no `<html>` e aplicar a classe da fonte ao `<body>`
+- [x] 5.3 Reescrever `src/app/globals.css` com `@import "tailwindcss"` e bloco `@theme` completo
+- [x] 5.4 Definir `body { background: var(--color-bg); color: var(--color-text); }`
+- [x] 5.5 Validar em DevTools que a fonte e cores Âmbar estão aplicadas
 
 ## Detalhes de Implementação
 
