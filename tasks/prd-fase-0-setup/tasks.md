@@ -4,7 +4,7 @@
 
 - [x] 1.0 Bootstrap Next.js + TypeScript + ESLint + Prettier
 - [x] 2.0 Criar estrutura de pastas Clean DDD
-- [ ] 3.0 Configurar Prisma com SQLite e schema completo
+- [x] 3.0 Configurar Prisma com SQLite e schema completo
 - [x] 4.0 Scaffolding do NextAuth.js
 - [x] 5.0 Configurar Tailwind v4, fonte Plus Jakarta Sans e tokens Âmbar
 - [ ] 6.0 Inicializar shadcn/ui e adicionar componentes base
