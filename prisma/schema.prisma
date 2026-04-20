@@ -1,0 +1,97 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  users     User[]
+  vehicles  Vehicle[]
+  invites   Invite[]
+}
+
+model User {
+  id           String        @id @default(cuid())
+  accountId    String
+  name         String
+  email        String        @unique
+  passwordHash String
+  createdAt    DateTime      @default(now())
+  account      Account       @relation(fields: [accountId], references: [id])
+  fuelups      Fuelup[]
+  maintenances Maintenance[]
+}
+
+model Invite {
+  id        String   @id @default(cuid())
+  accountId String
+  email     String
+  token     String   @unique
+  status    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  account   Account  @relation(fields: [accountId], references: [id])
+}
+
+model Vehicle {
+  id              String        @id @default(cuid())
+  accountId       String
+  name            String
+  brand           String?
+  model           String?
+  color           String?
+  plate           String?
+  initOdometer    Int
+  currentOdometer Int
+  createdAt       DateTime      @default(now())
+  account         Account       @relation(fields: [accountId], references: [id])
+  fuelups         Fuelup[]
+  maintenances    Maintenance[]
+}
+
+model Fuelup {
+  id            String   @id @default(cuid())
+  vehicleId     String
+  userId        String
+  date          DateTime
+  odometer      Int
+  fuelType      String
+  fullTank      Boolean
+  liters        Float
+  pricePerLiter Float
+  totalPrice    Float
+  kmPerLiter    Float?
+  createdAt     DateTime @default(now())
+  vehicle       Vehicle  @relation(fields: [vehicleId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model Maintenance {
+  id         String            @id @default(cuid())
+  vehicleId  String
+  userId     String
+  date       DateTime
+  odometer   Int
+  location   String?
+  totalPrice Float
+  createdAt  DateTime          @default(now())
+  vehicle    Vehicle           @relation(fields: [vehicleId], references: [id])
+  user       User              @relation(fields: [userId], references: [id])
+  items      MaintenanceItem[]
+}
+
+model MaintenanceItem {
+  id            String      @id @default(cuid())
+  maintenanceId String
+  description   String
+  quantity      Float
+  unitPrice     Float
+  subtotal      Float
+  maintenance   Maintenance @relation(fields: [maintenanceId], references: [id], onDelete: Cascade)
+}

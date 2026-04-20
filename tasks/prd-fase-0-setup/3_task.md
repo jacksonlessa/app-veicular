@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 parallelizable: true
 blocked_by: ["1.0"]
 ---
@@ -28,12 +28,12 @@ Instalar Prisma, declarar todas as 7 tabelas do escopo no `schema.prisma`, aplic
 
 ## Subtarefas
 
-- [ ] 3.1 `npm i @prisma/client` e `npm i -D prisma`
-- [ ] 3.2 `npx prisma init --datasource-provider sqlite`
-- [ ] 3.3 Escrever `schema.prisma` com os 7 models (ver TechSpec)
-- [ ] 3.4 Rodar `npx prisma migrate dev --name init`
-- [ ] 3.5 Criar `src/infrastructure/database/prisma.client.ts` com singleton
-- [ ] 3.6 Adicionar `prisma/dev.db*` ao `.gitignore`
+- [x] 3.1 `npm i @prisma/client` e `npm i -D prisma`
+- [x] 3.2 `npx prisma init --datasource-provider sqlite`
+- [x] 3.3 Escrever `schema.prisma` com os 7 models (ver TechSpec)
+- [x] 3.4 Rodar `npx prisma migrate dev --name init`
+- [x] 3.5 Criar `src/infrastructure/database/prisma.client.ts` com singleton
+- [x] 3.6 Adicionar `prisma/dev.db*` ao `.gitignore`
 
 ## Detalhes de Implementação
 
