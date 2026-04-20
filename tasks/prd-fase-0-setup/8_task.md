@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 parallelizable: true
 blocked_by: ["3.0", "4.0"]
 ---
@@ -28,11 +28,11 @@ Consolidar o onboarding do projeto: `.env.example` completo, `.gitignore` cobrin
 
 ## Subtarefas
 
-- [ ] 8.1 Criar `.env.example` com as três chaves
-- [ ] 8.2 Ajustar `.gitignore` (adicionar `.env.local`, `prisma/dev.db*` se ausentes)
-- [ ] 8.3 Criar `.env.local` local (não versionado) com `DATABASE_URL="file:./dev.db"`
-- [ ] 8.4 Escrever `README.md` com pré-requisitos (Node 20), passos de setup, scripts disponíveis
-- [ ] 8.5 Incluir seção "Arquitetura" no README com diagrama Clean DDD e regra de dependência
+- [x] 8.1 Criar `.env.example` com as três chaves
+- [x] 8.2 Ajustar `.gitignore` (adicionar `.env.local`, `prisma/dev.db*` se ausentes)
+- [x] 8.3 Criar `.env.local` local (não versionado) com `DATABASE_URL="file:./dev.db"`
+- [x] 8.4 Escrever `README.md` com pré-requisitos (Node 20), passos de setup, scripts disponíveis
+- [x] 8.5 Incluir seção "Arquitetura" no README com diagrama Clean DDD e regra de dependência
 
 ## Detalhes de Implementação
 
