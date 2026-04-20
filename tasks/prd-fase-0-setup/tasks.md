@@ -9,7 +9,7 @@
 - [x] 5.0 Configurar Tailwind v4, fonte Plus Jakarta Sans e tokens Âmbar
 - [x] 6.0 Inicializar shadcn/ui e adicionar componentes base
 - [ ] 7.0 Criar componente Logo e página de smoke test
-- [ ] 8.0 Variáveis de ambiente, gitignore e README de setup
+- [x] 8.0 Variáveis de ambiente, gitignore e README de setup
 
 ## Grafo de Dependências
 
