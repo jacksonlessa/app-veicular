@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 parallelizable: false
 blocked_by: ["5.0"]
 ---
@@ -27,10 +27,10 @@ Executar `shadcn init` para configurar `components.json` e `lib/utils.ts` (`cn()
 
 ## Subtarefas
 
-- [ ] 6.1 `npx shadcn@latest init` (responder: TypeScript, style "new-york", alias `@/components`)
-- [ ] 6.2 `npx shadcn@latest add button input select card badge tabs switch label separator`
-- [ ] 6.3 Verificar se os componentes consomem os tokens Âmbar (ajustar `--primary` se necessário para apontar para `--color-accent`)
-- [ ] 6.4 Confirmar que `src/lib/utils.ts` exporta `cn()`
+- [x] 6.1 `npx shadcn@latest init` (responder: TypeScript, style "new-york", alias `@/components`)
+- [x] 6.2 `npx shadcn@latest add button input select card badge tabs switch label separator`
+- [x] 6.3 Verificar se os componentes consomem os tokens Âmbar (ajustar `--primary` se necessário para apontar para `--color-accent`)
+- [x] 6.4 Confirmar que `src/lib/utils.ts` exporta `cn()`
 
 ## Detalhes de Implementação
 

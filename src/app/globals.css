@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --color-bg: #F0EEE8;
@@ -22,4 +26,101 @@
 body {
   background: var(--color-bg);
   color: var(--color-text);
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  /* --color-border is already defined in @theme above (Amber token) — shadcn border maps separately */
+  --color-shadcn-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  /* --color-accent is already defined in @theme above (Amber token) — preserve it */
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* Amber theme tokens mapped to shadcn semantic variables */
+  --background: #F0EEE8;
+  --foreground: #1A1814;
+  --card: #FFFFFF;
+  --card-foreground: #1A1814;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1814;
+  /* --primary maps to Amber accent color */
+  --primary: oklch(0.58 0.19 38);
+  --primary-foreground: #FFFFFF;
+  --secondary: #F8F7F3;
+  --secondary-foreground: #1A1814;
+  --muted: #F8F7F3;
+  --muted-foreground: #6B6760;
+  --accent: oklch(0.94 0.06 38);
+  --accent-foreground: #1A1814;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #E5E2DA;
+  --input: #E5E2DA;
+  --ring: oklch(0.58 0.19 38);
+  --chart-1: oklch(0.58 0.19 38);
+  --chart-2: oklch(0.58 0.14 188);
+  --chart-3: oklch(0.62 0.15 145);
+  --chart-4: oklch(0.58 0.18 20);
+  --chart-5: oklch(0.94 0.06 38);
+  --radius: 0.875rem;
+  --sidebar: #F8F7F3;
+  --sidebar-foreground: #1A1814;
+  --sidebar-primary: oklch(0.58 0.19 38);
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: oklch(0.94 0.06 38);
+  --sidebar-accent-foreground: #1A1814;
+  --sidebar-border: #E5E2DA;
+  --sidebar-ring: oklch(0.58 0.19 38);
+}
+
+/* Dark mode intentionally omitted — App Veicular uses Amber theme only */
+
+@layer base {
+  * {
+    @apply outline-ring/50;
+    border-color: var(--color-border);
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+  html {
+    @apply font-sans;
+  }
 }
