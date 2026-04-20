@@ -3,7 +3,7 @@
 ## Tarefas
 
 - [x] 1.0 Bootstrap Next.js + TypeScript + ESLint + Prettier
-- [ ] 2.0 Criar estrutura de pastas Clean DDD
+- [x] 2.0 Criar estrutura de pastas Clean DDD
 - [ ] 3.0 Configurar Prisma com SQLite e schema completo
 - [ ] 4.0 Scaffolding do NextAuth.js
 - [ ] 5.0 Configurar Tailwind v4, fonte Plus Jakarta Sans e tokens Âmbar
