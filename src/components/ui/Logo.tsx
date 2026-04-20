@@ -20,6 +20,7 @@ export function Logo({ size = 32 }: LogoProps) {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          aria-hidden="true"
         >
           <path d="M4 21l4-18h8l4 18"/>
           <path d="M9.5 11h5"/>
