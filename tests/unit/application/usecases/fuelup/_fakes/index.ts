@@ -44,6 +44,14 @@ export class FakeFuelupRepository implements FuelupRepository {
     return sorted[sorted.length - 1] ?? null;
   }
 
+  async findLastKmlByVehicle(vehicleId: string): Promise<number | null> {
+    const sorted = await this.findByVehicle(vehicleId);
+    const lastWithKml = [...sorted]
+      .reverse()
+      .find((f) => f.fullTank && f.kmPerLiter != null);
+    return lastWithKml?.kmPerLiter?.value ?? null;
+  }
+
   async create(fuelup: Fuelup): Promise<Fuelup> {
     this.store.push(fuelup);
     return fuelup;

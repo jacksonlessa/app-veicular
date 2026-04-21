@@ -93,6 +93,15 @@ export class PrismaFuelupRepository implements FuelupRepository {
     return row ? toEntity(row) : null;
   }
 
+  async findLastKmlByVehicle(vehicleId: string): Promise<number | null> {
+    const row = await this.prisma.fuelup.findFirst({
+      where: { vehicleId, kmPerLiter: { not: null }, fullTank: true },
+      orderBy: [{ date: "desc" }, { odometer: "desc" }],
+      select: { kmPerLiter: true },
+    });
+    return row?.kmPerLiter ?? null;
+  }
+
   async create(fuelup: Fuelup): Promise<Fuelup> {
     const data = toPersistence(fuelup);
     const row = await this.prisma.fuelup.create({ data });

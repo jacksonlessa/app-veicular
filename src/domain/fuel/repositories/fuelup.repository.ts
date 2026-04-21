@@ -9,6 +9,7 @@ export interface FuelupRepository {
     pageSize: number,
   ): Promise<{ items: Fuelup[]; total: number }>;
   findLastByVehicle(vehicleId: string): Promise<Fuelup | null>;
+  findLastKmlByVehicle(vehicleId: string): Promise<number | null>;
   create(fuelup: Fuelup): Promise<Fuelup>;
   update(fuelup: Fuelup): Promise<Fuelup>;
   delete(id: string): Promise<void>;

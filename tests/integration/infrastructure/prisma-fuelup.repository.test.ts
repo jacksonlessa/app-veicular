@@ -309,6 +309,65 @@ describe("PrismaFuelupRepository", () => {
     });
   });
 
+  describe("findLastKmlByVehicle()", () => {
+    it("should return null when vehicle has no fuelups", async () => {
+      const result = await repo.findLastKmlByVehicle(VEHICLE_ID);
+      expect(result).toBeNull();
+    });
+
+    it("should return null when all fuelups have null kmPerLiter", async () => {
+      await repo.create(makeFuelup({ id: "kml-null-1", kmPerLiter: null, fullTank: true }));
+      await repo.create(makeFuelup({ id: "kml-null-2", kmPerLiter: null, fullTank: true, odometer: 10500 }));
+
+      const result = await repo.findLastKmlByVehicle(VEHICLE_ID);
+      expect(result).toBeNull();
+    });
+
+    it("should return null when fuelups with kmPerLiter are not fullTank", async () => {
+      await repo.create(
+        makeFuelup({ id: "kml-partial-1", kmPerLiter: 12.5, fullTank: false })
+      );
+
+      const result = await repo.findLastKmlByVehicle(VEHICLE_ID);
+      expect(result).toBeNull();
+    });
+
+    it("should return kmPerLiter of the most recent fullTank fuelup with a non-null value", async () => {
+      const older = makeFuelup({
+        id: "kml-older",
+        date: makeDate("2024-01-01T10:00:00.000Z"),
+        odometer: 10000,
+        kmPerLiter: 10.0,
+        fullTank: true,
+        createdAt: new Date("2024-01-01T10:00:00.000Z"),
+      });
+      const newer = makeFuelup({
+        id: "kml-newer",
+        date: makeDate("2024-06-01T10:00:00.000Z"),
+        odometer: 15000,
+        kmPerLiter: 13.5,
+        fullTank: true,
+        createdAt: new Date("2024-06-01T10:00:00.000Z"),
+      });
+      const nullOne = makeFuelup({
+        id: "kml-null-last",
+        date: makeDate("2024-12-01T10:00:00.000Z"),
+        odometer: 20000,
+        kmPerLiter: null,
+        fullTank: true,
+        createdAt: new Date("2024-12-01T10:00:00.000Z"),
+      });
+
+      await repo.create(older);
+      await repo.create(newer);
+      await repo.create(nullOne);
+
+      const result = await repo.findLastKmlByVehicle(VEHICLE_ID);
+      // nullOne has null kmPerLiter so it is skipped; newer is the most recent with a value
+      expect(result).toBe(13.5);
+    });
+  });
+
   describe("delete()", () => {
     it("should remove fuelup from database", async () => {
       const fuelup = makeFuelup();
