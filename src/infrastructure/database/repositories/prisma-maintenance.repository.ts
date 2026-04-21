@@ -68,6 +68,8 @@ export class PrismaMaintenanceRepository implements MaintenanceRepository {
 
   private toEntity(raw: PrismaMaintenanceWithItems): Maintenance {
     const items = raw.items.map((item) =>
+      // subtotal is not passed because MaintenanceItem.rehydrate() recalculates it
+      // via the getter: quantity.value * unitPrice.value
       MaintenanceItem.rehydrate({
         id: item.id,
         description: item.description,
@@ -81,7 +83,9 @@ export class PrismaMaintenanceRepository implements MaintenanceRepository {
       vehicleId: raw.vehicleId,
       userId: raw.userId,
       date: MaintenanceDate.create(raw.date),
-      odometer: Odometer.create(raw.odometer),
+      // odometer is optional in the domain entity; guard against null from DB
+      odometer: raw.odometer !== null ? Odometer.create(raw.odometer) : undefined,
+      // location in the DB stores the general description/location of the maintenance
       location: raw.location ?? "",
       items,
       createdAt: raw.createdAt,
