@@ -9,7 +9,7 @@
 - [x] 5.0 `UpdateFuelupUseCase` + `DeleteFuelupUseCase` + testes unitários
 - [x] 6.0 `ListFuelupsUseCase` + `GetFuelupUseCase` + testes unitários
 - [x] 7.0 Container wiring + mapeamento de novos erros no error-handler
-- [ ] 8.0 API routes `/api/fuelups` (GET/POST) e `/api/fuelups/[id]` (GET/PUT/DELETE)
+- [x] 8.0 API routes `/api/fuelups` (GET/POST) e `/api/fuelups/[id]` (GET/PUT/DELETE)
 - [x] 9.0 Hook `useFuelupCalculator` + `FuelupForm` + Zod schema client-side
 - [ ] 10.0 Páginas `/abastecimento` (criar) e `/abastecimento/[id]` (editar)
 - [ ] 11.0 Página `/veiculos/[id]` com aba Abastecimentos + botão "Abastecer" no VehicleCard + km/l médio no dashboard
