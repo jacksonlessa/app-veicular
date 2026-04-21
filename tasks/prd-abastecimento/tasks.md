@@ -5,12 +5,12 @@
 - [x] 1.0 Estender `TransactionRunner` com `saveFuelup` e `deleteFuelup`
 - [x] 2.0 Implementar `PrismaFuelupRepository` (7 métodos) + teste de integração
 - [x] 3.0 Função pura `recalculateChain` + testes unitários
-- [ ] 4.0 `RegisterFuelupUseCase` + testes unitários
-- [ ] 5.0 `UpdateFuelupUseCase` + `DeleteFuelupUseCase` + testes unitários
-- [ ] 6.0 `ListFuelupsUseCase` + `GetFuelupUseCase` + testes unitários
+- [x] 4.0 `RegisterFuelupUseCase` + testes unitários
+- [x] 5.0 `UpdateFuelupUseCase` + `DeleteFuelupUseCase` + testes unitários
+- [x] 6.0 `ListFuelupsUseCase` + `GetFuelupUseCase` + testes unitários
 - [ ] 7.0 Container wiring + mapeamento de novos erros no error-handler
 - [ ] 8.0 API routes `/api/fuelups` (GET/POST) e `/api/fuelups/[id]` (GET/PUT/DELETE)
-- [ ] 9.0 Hook `useFuelupCalculator` + `FuelupForm` + Zod schema client-side
+- [x] 9.0 Hook `useFuelupCalculator` + `FuelupForm` + Zod schema client-side
 - [ ] 10.0 Páginas `/abastecimento` (criar) e `/abastecimento/[id]` (editar)
 - [ ] 11.0 Página `/veiculos/[id]` com aba Abastecimentos + botão "Abastecer" no VehicleCard + km/l médio no dashboard
 - [ ] 12.0 Smoke test manual + `validation.md`
