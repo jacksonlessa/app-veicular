@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 parallelizable: false
 blocked_by: ["1.0", "3.0"]
 ---
@@ -28,13 +28,13 @@ Implementa os dois use cases de escrita que alteram dados. Ambos precisam do `Tr
 
 ## Subtarefas
 
-- [ ] 4.1 Criar `src/application/usecases/maintenance/_shared/compute-new-odometer.ts`
-- [ ] 4.2 Criar `src/application/usecases/maintenance/register-maintenance.usecase.ts`
-- [ ] 4.3 Criar `src/application/usecases/maintenance/update-maintenance.usecase.ts`
-- [ ] 4.4 Criar `src/application/dtos/maintenance.dto.ts`
-- [ ] 4.5 Escrever testes unitários para `RegisterMaintenanceUseCase`
-- [ ] 4.6 Escrever testes unitários para `UpdateMaintenanceUseCase`
-- [ ] 4.7 Rodar `npm test` verde
+- [x] 4.1 Criar `src/application/usecases/maintenance/_shared/compute-new-odometer.ts`
+- [x] 4.2 Criar `src/application/usecases/maintenance/register-maintenance.usecase.ts`
+- [x] 4.3 Criar `src/application/usecases/maintenance/update-maintenance.usecase.ts`
+- [x] 4.4 Criar `src/application/dtos/maintenance.dto.ts`
+- [x] 4.5 Escrever testes unitários para `RegisterMaintenanceUseCase`
+- [x] 4.6 Escrever testes unitários para `UpdateMaintenanceUseCase`
+- [x] 4.7 Rodar `npm test` verde
 
 ## Detalhes de Implementação
 
