@@ -8,9 +8,10 @@ export const runtime = "nodejs";
 
 const AcceptSchema = z.object({ name: z.string().min(1), password: z.string().min(8) });
 
-export async function GET(_req: Request, { params }: { params: { token: string } }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ token: string }> }) {
+  const { token: tokenParam } = await params;
   try {
-    const token = InviteToken.create(params.token);
+    const token = InviteToken.create(tokenParam);
     const invite = await inviteRepository.findByToken(token);
     if (!invite) return NextResponse.json({ error: "invite.not_found" }, { status: 404 });
     if (!invite.isUsable(new Date())) return NextResponse.json({ error: "invite.expired_or_used" }, { status: 410 });
@@ -21,12 +22,13 @@ export async function GET(_req: Request, { params }: { params: { token: string }
   }
 }
 
-export async function POST(req: Request, { params }: { params: { token: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ token: string }> }) {
+  const { token: tokenParam } = await params;
   const parsed = AcceptSchema.safeParse(await req.json());
   if (!parsed.success)
     return NextResponse.json({ error: "validation", issues: parsed.error.issues }, { status: 400 });
   try {
-    const out = await acceptInviteUseCase.execute({ token: params.token, ...parsed.data });
+    const out = await acceptInviteUseCase.execute({ token: tokenParam, ...parsed.data });
     return NextResponse.json(out, { status: 201 });
   } catch (e) {
     return mapDomainError(e);
