@@ -1,11 +1,10 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { InviteUserUseCase } from "@/application/usecases/account/invite-user.usecase";
 import { Account } from "@/domain/account/entities/account.entity";
 import { Invite } from "@/domain/account/entities/invite.entity";
 import type { AccountRepository } from "@/domain/account/repositories/account.repository";
 import type { InviteRepository } from "@/domain/account/repositories/invite.repository";
 import type { UserRepository } from "@/domain/account/repositories/user.repository";
-import { BusinessRuleError } from "@/domain/shared/errors/business-rule.error";
 import { Email } from "@/domain/shared/value-objects/email.vo";
 import { InviteToken } from "@/domain/shared/value-objects/invite-token.vo";
 import type { Mailer } from "@/application/ports/mailer";

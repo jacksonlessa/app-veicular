@@ -36,11 +36,11 @@ export class AcceptInviteUseCase {
     if (!invite.isUsable(new Date()))
       throw new BusinessRuleError("invite.expired_or_used");
 
-    if (input.password.length < MIN_PASSWORD_LEN)
-      throw new InvalidValueError("password", "too_short");
-
     if ((await this.users.countByAccount(invite.accountId)) >= 2)
       throw new BusinessRuleError("invite.account_full");
+
+    if (input.password.length < MIN_PASSWORD_LEN)
+      throw new InvalidValueError("password", "too_short");
 
     const passwordHash = await this.hasher.hash(input.password);
     const userId = randomUUID();

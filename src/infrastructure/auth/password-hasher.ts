@@ -1,8 +1,6 @@
 import argon2 from "argon2";
 import type { PasswordHasher } from "@/application/ports/password-hasher";
 
-export type { PasswordHasher };
-
 export class Argon2PasswordHasher implements PasswordHasher {
   async hash(plain: string): Promise<string> {
     return argon2.hash(plain, {

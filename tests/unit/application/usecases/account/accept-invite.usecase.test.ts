@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { AcceptInviteUseCase } from "@/application/usecases/account/accept-invite.usecase";
 import { Invite } from "@/domain/account/entities/invite.entity";
 import type { InviteRepository } from "@/domain/account/repositories/invite.repository";
@@ -84,8 +84,8 @@ class FakeUserRepository implements UserRepository {
     return user;
   }
 
-  async countByAccount(): Promise<number> {
-    return this.store.length;
+  async countByAccount(accountId: string): Promise<number> {
+    return this.store.filter((u) => u.accountId === accountId).length;
   }
 
   getStored(): User[] {
