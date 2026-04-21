@@ -56,3 +56,44 @@ A implementação está sólida e pronta para ser consumida pelas tasks seguinte
 3. **[M1]** (Opcional/baixa prioridade) Tipar o retorno de `toPersistence` com o tipo Prisma adequado para detectar drift de schema em compile-time.
 4. **[M2]** (Opcional) Exportar `toEntity` e `toPersistence` para facilitar testes de integração.
 5. **[L1]** (Opcional) Renomear `_prisma` para `prisma` para alinhar com a convenção do `PrismaUserRepository`.
+
+---
+
+## Re-review — 2026-04-21
+
+### Correções aplicadas
+
+As seguintes correções foram verificadas na implementação atual em
+`src/infrastructure/database/repositories/prisma-vehicle.repository.ts`:
+
+**H1 — CORRIGIDO.** O método `create` agora envolve `prisma.vehicle.create` em bloco try/catch
+idêntico ao padrão do `PrismaUserRepository`. A verificação `"code" in e && (e as { code: unknown }).code === "P2002"`
+converte a exceção de constraint do Prisma para `BusinessRuleError("vehicle.plate_duplicate")`.
+O tratamento é typesafe e re-lança erros desconhecidos — correto.
+
+**M1 — CORRIGIDO.** `toPersistence` agora retorna `Prisma.VehicleCreateInput` explicitamente como tipo de retorno.
+O campo `account` usa nested write (`{ connect: { id: vehicle.accountId } }`) em vez de `accountId` direto,
+o que é a forma correta para `VehicleCreateInput` com relação obrigatória.
+
+**M2 — CORRIGIDO.** Ambas as funções `toEntity` e `toPersistence` são declaradas com `export function`,
+alinhando com o padrão do `PrismaUserRepository`.
+
+**L1 — CORRIGIDO.** O campo foi renomeado de `_prisma` para `prisma`. Todos os usos internos
+foram atualizados (`this.prisma.vehicle.*`).
+
+**H2 — Diferido intencionalmente para task 6.0.** Aceito como bloqueador desta re-review.
+
+### Verificação adicional
+
+- `toPersistence` não inclui `currentOdometer` no tipo de retorno inferido — confirmado que
+  o campo está presente (`currentOdometer: vehicle.currentOdometer.value`) e que `Prisma.VehicleCreateInput`
+  aceita o campo conforme o schema. Sem divergência.
+- `update` extrai campos individuais de `toPersistence(vehicle)` em vez de espalhar o objeto inteiro,
+  o que é correto: evita sobrescrever `account` (nested write) e `id` em um `prisma.vehicle.update`.
+- `tsc --noEmit` passa sem erros.
+
+### Verdict Final: APPROVED
+
+Todas as correções solicitadas na review original (H1, M1, M2, L1) foram aplicadas corretamente.
+H2 está diferido com justificativa aceita (task 6.0). A implementação está conforme o padrão do
+projeto, alinhada com a techspec e pronta para as tasks dependentes.
