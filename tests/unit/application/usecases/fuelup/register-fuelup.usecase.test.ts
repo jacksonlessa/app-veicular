@@ -242,6 +242,34 @@ describe("RegisterFuelupUseCase", () => {
     });
   });
 
+  // Scenario 5b: error — odometer.not_increasing via full-chain monotonicity check
+  describe("erro: odometer.not_increasing via verificação de cadeia completa", () => {
+    it("throws when retroactive insertion breaks chain monotonicity (new odometer > last but violates intermediate order)", async () => {
+      // Existing chain: A@Jan1/1000, B@Feb1/1100
+      // User inserts C@Jan15/1200 — passes old "last odometer" check (1200 > 1100)
+      // but chain sorted by date becomes [A@1000, C@1200, B@1100] → B.odometer(1100) < C.odometer(1200) → fails
+      vehicleRepo.seed([makeVehicle("v1", "acc-1")]);
+      fuelupRepo.seed([
+        makeFuelup("f1", "v1", 1000, 40, true, new Date("2024-01-01T08:00:00Z")),
+        makeFuelup("f2", "v1", 1100, 40, true, new Date("2024-02-01T08:00:00Z")),
+      ]);
+
+      await expect(
+        useCase.execute({
+          accountId: "acc-1",
+          userId: "user-1",
+          vehicleId: "v1",
+          date: new Date("2024-01-15T08:00:00Z"),
+          odometer: 1200,
+          fuelType: "Gasolina",
+          fullTank: true,
+          liters: 40,
+          pricePerLiter: 5,
+        }),
+      ).rejects.toMatchObject({ code: "odometer.not_increasing" });
+    });
+  });
+
   // Scenario 6: error — fuelup.three_fields (only 1 price field provided)
   describe("erro: fuelup.three_fields", () => {
     it("throws when only liters is provided (pricePerLiter and totalPrice missing)", async () => {

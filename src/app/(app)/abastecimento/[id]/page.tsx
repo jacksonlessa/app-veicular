@@ -121,6 +121,7 @@ export default function AbastecimentoEditarPage() {
         hiddenVehicleId={fuelup.vehicleId}
         onSubmit={onSubmit}
         submitLabel="Salvar alterações"
+        title="Editar abastecimento"
       />
       <div className="w-full max-w-[430px] mx-auto mt-4">
         <button

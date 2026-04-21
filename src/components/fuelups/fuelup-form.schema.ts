@@ -46,6 +46,9 @@ export const fuelupFormSchema = z
         path: ["liters"],
       });
     }
+    if (provided.length > 2) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Preencha exatamente 2 dos 3 campos", path: ["liters"] });
+    }
   });
 
 export type FuelupFormValues = z.infer<typeof fuelupFormSchema>;

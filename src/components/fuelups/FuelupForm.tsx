@@ -24,6 +24,7 @@ interface FuelupFormProps {
   submitLabel?: string;
   /** vehicleId fixo passado pela página quando não há seletor de veículos */
   hiddenVehicleId?: string;
+  title?: string;
 }
 
 function todayString(): string {
@@ -41,6 +42,7 @@ export function FuelupForm({
   onSubmit,
   submitLabel = "Registrar",
   hiddenVehicleId,
+  title = "Registrar abastecimento",
 }: FuelupFormProps) {
   const [vehicleId, setVehicleId] = useState(
     initialValues?.vehicleId ?? hiddenVehicleId ?? (vehicles[0]?.id ?? "")
@@ -190,7 +192,7 @@ export function FuelupForm({
     <div className="w-full max-w-[430px] mx-auto bg-white rounded-2xl shadow-md overflow-hidden">
       {/* Header */}
       <div className="px-5 py-4 border-b border-[#E5E2DA]">
-        <h1 className="text-[17px] font-bold text-[#1A1814]">Registrar abastecimento</h1>
+        <h1 className="text-[17px] font-bold text-[#1A1814]">{title}</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="px-5 py-5 flex flex-col gap-4">

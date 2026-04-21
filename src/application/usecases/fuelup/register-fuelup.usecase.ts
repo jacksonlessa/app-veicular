@@ -77,6 +77,14 @@ export class RegisterFuelupUseCase {
     // Load full chain, insert new fuelup, sort canonically, recalculate
     const existing = await this.fuelups.findByVehicle(input.vehicleId);
     const chain = [...existing, newFuelup].sort(byCanonicalOrder);
+
+    // Validate monotonicity of the full chain after insertion
+    for (let i = 1; i < chain.length; i++) {
+      if (chain[i].odometer.value <= chain[i - 1].odometer.value) {
+        throw new BusinessRuleError("odometer.not_increasing");
+      }
+    }
+
     const recomputed = recalculateChain(chain);
 
     const upserted = recomputed.find((f) => f.id === newFuelup.id)!;
