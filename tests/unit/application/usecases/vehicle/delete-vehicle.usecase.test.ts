@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
 import { DeleteVehicleUseCase } from "@/application/usecases/vehicle/delete-vehicle.usecase";
 import type { VehicleRepository } from "@/domain/vehicle/repositories/vehicle.repository";
 import { Vehicle } from "@/domain/vehicle/entities/vehicle.entity";
@@ -34,7 +34,7 @@ const mockRepo = {
   create: vi.fn(),
   update: vi.fn(),
   delete: vi.fn(),
-} satisfies jest.Mocked<VehicleRepository>;
+} satisfies Mocked<VehicleRepository>;
 
 function makeUseCase() {
   return new DeleteVehicleUseCase(mockRepo as unknown as VehicleRepository);

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
 import { CreateVehicleUseCase } from "@/application/usecases/vehicle/create-vehicle.usecase";
 import type { VehicleRepository } from "@/domain/vehicle/repositories/vehicle.repository";
 import { Vehicle } from "@/domain/vehicle/entities/vehicle.entity";
@@ -35,7 +35,7 @@ const mockRepo = {
   create: vi.fn(),
   update: vi.fn(),
   delete: vi.fn(),
-} satisfies jest.Mocked<VehicleRepository>;
+} satisfies Mocked<VehicleRepository>;
 
 function makeUseCase() {
   return new CreateVehicleUseCase(mockRepo as unknown as VehicleRepository);
@@ -66,7 +66,7 @@ describe("CreateVehicleUseCase", () => {
 
     it("should call repository.create when input is valid", async () => {
       mockRepo.findByAccount.mockResolvedValue([]);
-      mockRepo.create.mockImplementation(async (v) => v);
+      mockRepo.create.mockImplementation(async (v: Vehicle) => v);
 
       const useCase = makeUseCase();
       await useCase.execute({ accountId: "acc-1", name: "Fusca", initOdometer: 10000 });
@@ -76,7 +76,7 @@ describe("CreateVehicleUseCase", () => {
 
     it("should accept vehicle with a valid plate", async () => {
       mockRepo.findByAccount.mockResolvedValue([]);
-      mockRepo.create.mockImplementation(async (v) => v);
+      mockRepo.create.mockImplementation(async (v: Vehicle) => v);
 
       const useCase = makeUseCase();
       const result = await useCase.execute({ accountId: "acc-1", name: "Gol", plate: "ABC1234", initOdometer: 0 });
@@ -86,7 +86,7 @@ describe("CreateVehicleUseCase", () => {
 
     it("should create vehicle with zero odometer when initOdometer is 0", async () => {
       mockRepo.findByAccount.mockResolvedValue([]);
-      mockRepo.create.mockImplementation(async (v) => v);
+      mockRepo.create.mockImplementation(async (v: Vehicle) => v);
 
       const useCase = makeUseCase();
       await useCase.execute({ accountId: "acc-1", name: "Moto", initOdometer: 0 });

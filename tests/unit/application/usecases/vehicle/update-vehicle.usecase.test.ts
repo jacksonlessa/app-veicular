@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, vi, type Mocked } from "vitest";
 import { UpdateVehicleUseCase } from "@/application/usecases/vehicle/update-vehicle.usecase";
 import type { VehicleRepository } from "@/domain/vehicle/repositories/vehicle.repository";
 import { Vehicle } from "@/domain/vehicle/entities/vehicle.entity";
@@ -42,7 +42,7 @@ const mockRepo = {
   create: vi.fn(),
   update: vi.fn(),
   delete: vi.fn(),
-} satisfies jest.Mocked<VehicleRepository>;
+} satisfies Mocked<VehicleRepository>;
 
 function makeUseCase() {
   return new UpdateVehicleUseCase(mockRepo as unknown as VehicleRepository);
@@ -61,7 +61,7 @@ describe("UpdateVehicleUseCase", () => {
     it("should return updated vehicle DTO when update is successful", async () => {
       const vehicle = makeVehicle({ initOdometer: 1000, currentOdometer: 1000 });
       mockRepo.findById.mockResolvedValue(vehicle);
-      mockRepo.update.mockImplementation(async (v) => v);
+      mockRepo.update.mockImplementation(async (v: Vehicle) => v);
 
       const useCase = makeUseCase();
       const result = await useCase.execute({
@@ -78,7 +78,7 @@ describe("UpdateVehicleUseCase", () => {
     it("should call repository.update with updated entity", async () => {
       const vehicle = makeVehicle();
       mockRepo.findById.mockResolvedValue(vehicle);
-      mockRepo.update.mockImplementation(async (v) => v);
+      mockRepo.update.mockImplementation(async (v: Vehicle) => v);
 
       const useCase = makeUseCase();
       await useCase.execute({ vehicleId: vehicle.id, accountId: vehicle.accountId, name: "Atualizado" });
@@ -89,7 +89,7 @@ describe("UpdateVehicleUseCase", () => {
     it("should keep original plate when plate is not provided in update", async () => {
       const vehicle = makeVehicle();
       mockRepo.findById.mockResolvedValue(vehicle);
-      mockRepo.update.mockImplementation(async (v) => v);
+      mockRepo.update.mockImplementation(async (v: Vehicle) => v);
 
       const useCase = makeUseCase();
       const result = await useCase.execute({
@@ -115,7 +115,7 @@ describe("UpdateVehicleUseCase", () => {
         createdAt: new Date("2024-01-01"),
       });
       mockRepo.findById.mockResolvedValue(vehicleWithPlate);
-      mockRepo.update.mockImplementation(async (v) => v);
+      mockRepo.update.mockImplementation(async (v: Vehicle) => v);
 
       const useCase = makeUseCase();
       const result = await useCase.execute({
