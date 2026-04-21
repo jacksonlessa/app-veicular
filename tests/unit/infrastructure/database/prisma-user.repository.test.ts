@@ -182,6 +182,76 @@ describe("PrismaUserRepository — findByEmail", () => {
   });
 });
 
+describe("PrismaUserRepository — countByAccount", () => {
+  it("returns 0 when no users belong to the account", async () => {
+    const mockPrisma = {
+      user: {
+        count: vi.fn().mockResolvedValue(0),
+      },
+    };
+
+    const repo = new PrismaUserRepository(mockPrisma as never);
+    const result = await repo.countByAccount("acc_empty");
+    expect(result).toBe(0);
+    expect(mockPrisma.user.count).toHaveBeenCalledWith({
+      where: { accountId: "acc_empty" },
+    });
+  });
+
+  it("returns 1 when one user belongs to the account", async () => {
+    const mockPrisma = {
+      user: {
+        count: vi.fn().mockResolvedValue(1),
+      },
+    };
+
+    const repo = new PrismaUserRepository(mockPrisma as never);
+    const result = await repo.countByAccount("acc_01");
+    expect(result).toBe(1);
+    expect(mockPrisma.user.count).toHaveBeenCalledWith({
+      where: { accountId: "acc_01" },
+    });
+  });
+
+  it("returns 2 when two users belong to the account", async () => {
+    const mockPrisma = {
+      user: {
+        count: vi.fn().mockResolvedValue(2),
+      },
+    };
+
+    const repo = new PrismaUserRepository(mockPrisma as never);
+    const result = await repo.countByAccount("acc_01");
+    expect(result).toBe(2);
+  });
+
+  it("counts are isolated between accounts", async () => {
+    const counts: Record<string, number> = {
+      acc_A: 2,
+      acc_B: 0,
+    };
+
+    const mockPrisma = {
+      user: {
+        count: vi.fn().mockImplementation(({ where }: { where: { accountId: string } }) =>
+          Promise.resolve(counts[where.accountId] ?? 0)
+        ),
+      },
+    };
+
+    const repo = new PrismaUserRepository(mockPrisma as never);
+
+    const countA = await repo.countByAccount("acc_A");
+    const countB = await repo.countByAccount("acc_B");
+
+    expect(countA).toBe(2);
+    expect(countB).toBe(0);
+    expect(mockPrisma.user.count).toHaveBeenCalledTimes(2);
+    expect(mockPrisma.user.count).toHaveBeenNthCalledWith(1, { where: { accountId: "acc_A" } });
+    expect(mockPrisma.user.count).toHaveBeenNthCalledWith(2, { where: { accountId: "acc_B" } });
+  });
+});
+
 describe("PrismaUserRepository — findById", () => {
   it("returns null when user not found", async () => {
     const mockPrisma = {

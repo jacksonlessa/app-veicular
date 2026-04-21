@@ -48,6 +48,10 @@ export class PrismaUserRepository implements UserRepository {
     return row ? toEntity(row) : null;
   }
 
+  async countByAccount(accountId: string): Promise<number> {
+    return this.prisma.user.count({ where: { accountId } });
+  }
+
   async create(user: User): Promise<User> {
     try {
       const row = await this.prisma.user.create({ data: toPersistence(user) });

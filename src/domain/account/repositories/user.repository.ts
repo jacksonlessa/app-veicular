@@ -5,4 +5,5 @@ export interface UserRepository {
   findByEmail(email: Email): Promise<User | null>;
   findById(id: string): Promise<User | null>;
   create(user: User): Promise<User>;
+  countByAccount(accountId: string): Promise<number>;
 }
