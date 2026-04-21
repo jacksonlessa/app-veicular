@@ -9,7 +9,7 @@
 - [x] 5.0 Fuel context: VOs + Fuelup entity + repo interface
 - [ ] 6.0 FuelupService: regra dos 3 campos + cálculo condicional de km/l
 - [x] 7.0 Maintenance context: VOs + Maintenance e MaintenanceItem + repo interface
-- [ ] 8.0 Mailer port (application) + NoopMailer
+- [x] 8.0 Mailer port (application) + NoopMailer
 - [ ] 9.0 Repositórios Prisma (Account/User completos, demais com stubs)
 - [ ] 10.0 Infra auth: Argon2PasswordHasher, nextauth.config e container
 - [ ] 11.0 Validação manual: seed script e login funcional
