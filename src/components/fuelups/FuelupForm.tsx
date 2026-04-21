@@ -22,6 +22,8 @@ interface FuelupFormProps {
   initialValues?: Partial<FuelupFormValues>;
   onSubmit: (values: FuelupFormValues) => Promise<void>;
   submitLabel?: string;
+  /** vehicleId fixo passado pela página quando não há seletor de veículos */
+  hiddenVehicleId?: string;
 }
 
 function todayString(): string {
@@ -38,8 +40,11 @@ export function FuelupForm({
   initialValues,
   onSubmit,
   submitLabel = "Registrar",
+  hiddenVehicleId,
 }: FuelupFormProps) {
-  const [vehicleId, setVehicleId] = useState(initialValues?.vehicleId ?? (vehicles[0]?.id ?? ""));
+  const [vehicleId, setVehicleId] = useState(
+    initialValues?.vehicleId ?? hiddenVehicleId ?? (vehicles[0]?.id ?? "")
+  );
   const [date, setDate] = useState(initialValues?.date ?? todayString());
   const [odometer, setOdometer] = useState(
     initialValues?.odometer !== undefined ? String(initialValues.odometer) : ""
