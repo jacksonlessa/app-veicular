@@ -25,7 +25,7 @@ function makeMaintenance(id: string, vehicleId = "vehicle-1", withOdometer = tru
     vehicleId,
     userId: "user-1",
     date: MaintenanceDate.create(new Date("2024-01-10")),
-    odometer: withOdometer ? Odometer.create(50000) : Odometer.create(0),
+    odometer: withOdometer ? Odometer.create(50000) : undefined,
     location: "Oficina",
     items: [makeItem()],
     createdAt: new Date("2024-01-10T00:00:00.000Z"),
@@ -147,24 +147,27 @@ describe("DeleteMaintenanceUseCase", () => {
     });
   });
 
-  describe("sucesso — manutenção sem odômetro (odometer = 0 não conta como ausente, mas a lógica usa o valor da entidade)", () => {
-    it("should call deleteMaintenance with recalculateOdometer=false when maintenance odometer is falsy", async () => {
-      // The entity always has an Odometer object, so "without odometer" means the use case
-      // must check if odometer is null/undefined at domain level. In current entity design,
-      // odometer is always set. We test the path where odometer check considers it present.
-      // This test documents the expected txRunner call signature.
-      const maintenance = makeMaintenance("maint-1", "vehicle-1", true);
+  describe("sucesso — manutenção sem odômetro", () => {
+    it("should call deleteMaintenance with recalculateOdometer=false when maintenance has no odometer", async () => {
+      const maintenance = makeMaintenance("maint-1", "vehicle-1", false); // no odometer
       const vehicle = makeVehicle("vehicle-1", "account-1");
       mockMaintenanceRepo.findById.mockResolvedValue(maintenance);
       mockVehicleRepo.findById.mockResolvedValue(vehicle);
-      mockFuelupRepo.findByVehicle.mockResolvedValue([]);
-      mockMaintenanceRepo.findByVehicle.mockResolvedValue([maintenance]);
       mockTxRunner.deleteMaintenance.mockResolvedValue(undefined);
 
       const useCase = makeUseCase();
       await useCase.execute({ id: "maint-1", accountId: "account-1" });
 
-      expect(mockTxRunner.deleteMaintenance).toHaveBeenCalledOnce();
+      expect(mockTxRunner.deleteMaintenance).toHaveBeenCalledWith(
+        expect.objectContaining({
+          maintenanceId: "maint-1",
+          vehicleId: "vehicle-1",
+          recalculateOdometer: false,
+        }),
+      );
+      // fuelup and maintenance repos should NOT be called when no odometer recalculation needed
+      expect(mockFuelupRepo.findByVehicle).not.toHaveBeenCalled();
+      expect(mockMaintenanceRepo.findByVehicle).not.toHaveBeenCalled();
     });
   });
 
