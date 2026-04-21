@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: completed
 parallelizable: true
 blocked_by: []
 ---
@@ -31,16 +31,16 @@ Cria (ou verifica se já existem) os artefatos de domínio da manutenção: trê
 
 ## Subtarefas
 
-- [ ] 3.1 Verificar existência dos VOs em `src/domain/maintenance/value-objects/`; criar os ausentes
+- [x] 3.1 Verificar existência dos VOs em `src/domain/maintenance/value-objects/`; criar os ausentes
   - `maintenance-date.vo.ts`
   - `item-quantity.vo.ts`
   - `item-price.vo.ts`
-- [ ] 3.2 Verificar/criar `src/domain/maintenance/entities/maintenance-item.entity.ts`
-- [ ] 3.3 Verificar/criar `src/domain/maintenance/entities/maintenance.entity.ts`
-- [ ] 3.4 Verificar/criar `src/domain/maintenance/repositories/maintenance.repository.ts`
-- [ ] 3.5 Escrever testes unitários para os 3 VOs
-- [ ] 3.6 Escrever testes unitários para `MaintenanceItem` e `Maintenance`
-- [ ] 3.7 Rodar `npm test` verde
+- [x] 3.2 Verificar/criar `src/domain/maintenance/entities/maintenance-item.entity.ts`
+- [x] 3.3 Verificar/criar `src/domain/maintenance/entities/maintenance.entity.ts`
+- [x] 3.4 Verificar/criar `src/domain/maintenance/repositories/maintenance.repository.ts`
+- [x] 3.5 Escrever testes unitários para os 3 VOs
+- [x] 3.6 Escrever testes unitários para `MaintenanceItem` e `Maintenance`
+- [x] 3.7 Rodar `npm test` verde
 
 ## Detalhes de Implementação
 

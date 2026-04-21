@@ -25,6 +25,10 @@ export class MaintenanceDate extends ValueObject<Date> {
     return new MaintenanceDate(date);
   }
 
+  static rehydrate(raw: Date): MaintenanceDate {
+    return new MaintenanceDate(raw);
+  }
+
   equals(other: ValueObject<Date>): boolean {
     return (
       other?.constructor === this.constructor &&

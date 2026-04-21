@@ -8,8 +8,8 @@ interface MaintenanceProps {
   vehicleId: string;
   userId: string;
   date: MaintenanceDate;
-  odometer: Odometer;
-  location: string;
+  odometer?: Odometer;
+  location?: string;
   items: MaintenanceItem[];
   createdAt: Date;
 }
@@ -26,8 +26,8 @@ export class Maintenance {
     vehicleId: string;
     userId: string;
     date: MaintenanceDate;
-    odometer: Odometer;
-    location: string;
+    odometer?: Odometer;
+    location?: string;
     items: MaintenanceItem[];
     createdAt?: Date;
   }): Maintenance {
@@ -67,11 +67,11 @@ export class Maintenance {
     return this.props.date;
   }
 
-  get odometer(): Odometer {
+  get odometer(): Odometer | undefined {
     return this.props.odometer;
   }
 
-  get location(): string {
+  get location(): string | undefined {
     return this.props.location;
   }
 

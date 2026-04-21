@@ -12,4 +12,8 @@ export class ItemQuantity extends ValueObject<number> {
     }
     return new ItemQuantity(input);
   }
+
+  static rehydrate(value: number): ItemQuantity {
+    return new ItemQuantity(value);
+  }
 }
