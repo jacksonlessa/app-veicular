@@ -3,9 +3,9 @@
 ## Tarefas
 
 - [x] 1.0 Setup: instalar zod e estender tipos de sessão do NextAuth
-- [ ] 2.0 Domínio Invite: entidade + InviteRepository interface + testes
-- [ ] 3.0 Estender UserRepository.countByAccount (interface + Prisma + teste)
-- [ ] 4.0 TokenGenerator port + impl crypto.randomBytes + teste
+- [x] 2.0 Domínio Invite: entidade + InviteRepository interface + testes
+- [x] 3.0 Estender UserRepository.countByAccount (interface + Prisma + teste)
+- [x] 4.0 TokenGenerator port + impl crypto.randomBytes + teste
 - [ ] 5.0 PrismaInviteRepository + teste
 - [ ] 6.0 RegisterAccountUseCase + teste
 - [ ] 7.0 InviteUserUseCase + teste
