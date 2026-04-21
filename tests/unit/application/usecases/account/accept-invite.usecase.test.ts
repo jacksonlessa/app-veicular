@@ -7,8 +7,9 @@ import { BusinessRuleError } from "@/domain/shared/errors/business-rule.error";
 import { InvalidValueError } from "@/domain/shared/errors/invalid-value.error";
 import { Email } from "@/domain/shared/value-objects/email.vo";
 import { InviteToken } from "@/domain/shared/value-objects/invite-token.vo";
-import type { PasswordHasher } from "@/infrastructure/auth/password-hasher";
-import type { User } from "@/domain/account/entities/user.entity";
+import type { PasswordHasher } from "@/application/ports/password-hasher";
+import { User } from "@/domain/account/entities/user.entity";
+import type { PrismaClient } from "@prisma/client";
 
 // ─── Fakes ────────────────────────────────────────────────────────────────────
 
@@ -30,7 +31,7 @@ function makePendingInvite(): Invite {
 }
 
 class FakeInviteRepository implements InviteRepository {
-  private store: Invite[] = [];
+  readonly store: Invite[] = [];
 
   seed(invite: Invite) {
     this.store.push(invite);
@@ -61,16 +62,13 @@ class FakeInviteRepository implements InviteRepository {
 }
 
 class FakeUserRepository implements UserRepository {
-  private store: User[] = [];
+  readonly store: User[] = [];
 
   setCount(count: number) {
-    // populate with dummy entries to reach desired count
-    this.store = Array.from({ length: count }).map((_, i) =>
-      ({
-        id: `user-fake-${i}`,
-        accountId: ACCOUNT_ID,
-      }) as unknown as User,
-    );
+    this.store.length = 0;
+    for (let i = 0; i < count; i++) {
+      this.store.push({ id: `user-fake-${i}`, accountId: ACCOUNT_ID } as unknown as User);
+    }
   }
 
   async findByEmail(): Promise<User | null> {
@@ -107,6 +105,29 @@ class FakePasswordHasher implements PasswordHasher {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+function buildFakePrisma(inviteRepo: FakeInviteRepository, userRepo: FakeUserRepository): PrismaClient {
+  return {
+    $transaction: async (fn: (tx: unknown) => Promise<unknown>) => {
+      const tx = {
+        user: {
+          create: async ({ data }: { data: { id: string; accountId: string; name: string; email: string; passwordHash: string; createdAt: Date } }) => {
+            userRepo.store.push(User.rehydrate({ id: data.id, accountId: data.accountId, name: data.name, email: Email.create(data.email), passwordHash: data.passwordHash, createdAt: data.createdAt }));
+            return data;
+          },
+        },
+        invite: {
+          update: async ({ where, data }: { where: { id: string }; data: { status: string } }) => {
+            const invite = inviteRepo.store.find((i) => i.id === where.id);
+            if (invite) Object.assign(invite, { _status: data.status });
+            return {};
+          },
+        },
+      };
+      return fn(tx);
+    },
+  } as unknown as PrismaClient;
+}
+
 function buildSut(opts?: {
   invite?: Invite | null;
   userCount?: number;
@@ -122,7 +143,7 @@ function buildSut(opts?: {
     userRepo.setCount(opts.userCount);
   }
 
-  const sut = new AcceptInviteUseCase(inviteRepo, userRepo, hasher);
+  const sut = new AcceptInviteUseCase(inviteRepo, userRepo, hasher, buildFakePrisma(inviteRepo, userRepo));
   return { sut, inviteRepo, userRepo };
 }
 
@@ -245,68 +266,35 @@ describe("AcceptInviteUseCase", () => {
   });
 
   describe("when all inputs are valid", () => {
-    let inviteRepo: FakeInviteRepository;
-    let userRepo: FakeUserRepository;
-
-    beforeEach(async () => {
-      ({ inviteRepo, userRepo } = buildSut({ userCount: 1 }));
-      // Need fresh sut built from the repos we captured
-    });
-
     it("returns userId and accountId", async () => {
-      const fakeInviteRepo = new FakeInviteRepository();
-      fakeInviteRepo.seed(makePendingInvite());
-      const fakeUserRepo = new FakeUserRepository();
-      fakeUserRepo.setCount(0);
-      const sut = new AcceptInviteUseCase(fakeInviteRepo, fakeUserRepo, new FakePasswordHasher());
-
-      const result = await sut.execute({
-        token: VALID_TOKEN_STR,
-        name: "Bob",
-        password: "password123",
-      });
-
+      const { sut } = buildSut();
+      const result = await sut.execute({ token: VALID_TOKEN_STR, name: "Bob", password: "password123" });
       expect(result).toMatchObject({ accountId: ACCOUNT_ID });
       expect(typeof result.userId).toBe("string");
       expect(result.userId.length).toBeGreaterThan(0);
     });
 
     it("creates a new user in the user repository", async () => {
-      const fakeInviteRepo = new FakeInviteRepository();
-      fakeInviteRepo.seed(makePendingInvite());
-      const fakeUserRepo = new FakeUserRepository();
-      const sut = new AcceptInviteUseCase(fakeInviteRepo, fakeUserRepo, new FakePasswordHasher());
-
+      const { sut, userRepo } = buildSut();
       await sut.execute({ token: VALID_TOKEN_STR, name: "Bob", password: "password123" });
-
-      const stored = fakeUserRepo.getStored();
+      const stored = userRepo.getStored();
       expect(stored).toHaveLength(1);
       expect(stored[0].name).toBe("Bob");
       expect(stored[0].accountId).toBe(ACCOUNT_ID);
     });
 
-    it("marks the invite as accepted", async () => {
-      const fakeInviteRepo = new FakeInviteRepository();
-      const pendingInvite = makePendingInvite();
-      fakeInviteRepo.seed(pendingInvite);
-      const fakeUserRepo = new FakeUserRepository();
-      const sut = new AcceptInviteUseCase(fakeInviteRepo, fakeUserRepo, new FakePasswordHasher());
-
+    it("marks the invite as accepted via prisma transaction", async () => {
+      const { sut, inviteRepo } = buildSut();
       await sut.execute({ token: VALID_TOKEN_STR, name: "Bob", password: "password123" });
-
-      const stored = fakeInviteRepo.getStored();
-      expect(stored[0].status).toBe("accepted");
+      // The invite status is updated via raw prisma; the fake tx sets _status
+      const stored = inviteRepo.getStored();
+      expect((stored[0] as unknown as { _status: string })._status).toBe("accepted");
     });
 
     it("creates user with the email from the invite", async () => {
-      const fakeInviteRepo = new FakeInviteRepository();
-      fakeInviteRepo.seed(makePendingInvite());
-      const fakeUserRepo = new FakeUserRepository();
-      const sut = new AcceptInviteUseCase(fakeInviteRepo, fakeUserRepo, new FakePasswordHasher());
-
+      const { sut, userRepo } = buildSut();
       await sut.execute({ token: VALID_TOKEN_STR, name: "Bob", password: "password123" });
-
-      const stored = fakeUserRepo.getStored();
+      const stored = userRepo.getStored();
       expect(stored[0].email.value).toBe("invited@example.com");
     });
   });

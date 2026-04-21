@@ -39,4 +39,5 @@ export const acceptInviteUseCase = new AcceptInviteUseCase(
   inviteRepository,
   userRepository,
   hasher,
+  prisma,
 );

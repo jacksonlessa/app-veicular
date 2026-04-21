@@ -1,11 +1,11 @@
 import { randomUUID } from "node:crypto";
-import { User } from "@/domain/account/entities/user.entity";
+import type { PrismaClient } from "@prisma/client";
 import type { InviteRepository } from "@/domain/account/repositories/invite.repository";
 import type { UserRepository } from "@/domain/account/repositories/user.repository";
 import { BusinessRuleError } from "@/domain/shared/errors/business-rule.error";
 import { InvalidValueError } from "@/domain/shared/errors/invalid-value.error";
 import { InviteToken } from "@/domain/shared/value-objects/invite-token.vo";
-import type { PasswordHasher } from "@/infrastructure/auth/password-hasher";
+import type { PasswordHasher } from "@/application/ports/password-hasher";
 import { MIN_PASSWORD_LEN } from "./constants";
 
 export interface AcceptInviteInput {
@@ -24,6 +24,7 @@ export class AcceptInviteUseCase {
     private readonly invites: InviteRepository,
     private readonly users: UserRepository,
     private readonly hasher: PasswordHasher,
+    private readonly prisma: PrismaClient,
   ) {}
 
   async execute(input: AcceptInviteInput): Promise<AcceptInviteOutput> {
@@ -42,19 +43,28 @@ export class AcceptInviteUseCase {
       throw new BusinessRuleError("invite.account_full");
 
     const passwordHash = await this.hasher.hash(input.password);
-    const user = User.create({
-      id: randomUUID(),
-      accountId: invite.accountId,
-      name: input.name,
-      email: invite.email,
-      passwordHash,
+    const userId = randomUUID();
+    const now = new Date();
+
+    // MVP: repos não aceitam TransactionClient; usamos operações brutas dentro
+    // do $transaction para garantir atomicidade de User.create + Invite.update.
+    await this.prisma.$transaction(async (tx) => {
+      await tx.user.create({
+        data: {
+          id: userId,
+          accountId: invite.accountId,
+          name: input.name,
+          email: invite.email.value,
+          passwordHash,
+          createdAt: now,
+        },
+      });
+      await tx.invite.update({
+        where: { id: invite.id },
+        data: { status: "accepted" },
+      });
     });
 
-    await this.users.create(user);
-
-    invite.markAccepted();
-    await this.invites.update(invite);
-
-    return { userId: user.id, accountId: invite.accountId };
+    return { userId, accountId: invite.accountId };
   }
 }
