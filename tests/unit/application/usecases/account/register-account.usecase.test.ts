@@ -8,7 +8,7 @@ import { BusinessRuleError } from "@/domain/shared/errors/business-rule.error";
 import { InvalidValueError } from "@/domain/shared/errors/invalid-value.error";
 import { Email } from "@/domain/shared/value-objects/email.vo";
 import type { PasswordHasher } from "@/application/ports/password-hasher";
-import type { PrismaClient } from "@prisma/client";
+import type { TransactionRunner, CreateAccountWithOwnerData, AcceptInviteTransactionData } from "@/application/ports/transaction-runner";
 
 // ---------------------------------------------------------------------------
 // Fakes em memória
@@ -58,27 +58,26 @@ class FakePasswordHasher implements PasswordHasher {
   }
 }
 
-// Builds a fake PrismaClient whose $transaction writes through to the fake repos
-function buildFakePrisma(userStore: User[], accountStore: Account[]): PrismaClient {
-  return {
-    $transaction: async (fn: (tx: unknown) => Promise<unknown>) => {
-      const tx = {
-        account: {
-          create: async ({ data }: { data: { id: string; name: string; createdAt: Date } }) => {
-            accountStore.push({ id: data.id, name: data.name, createdAt: data.createdAt } as unknown as Account);
-            return data;
-          },
-        },
-        user: {
-          create: async ({ data }: { data: { id: string; accountId: string; name: string; email: string; passwordHash: string; createdAt: Date } }) => {
-            userStore.push({ id: data.id, accountId: data.accountId, name: data.name, email: Email.create(data.email), passwordHash: data.passwordHash } as unknown as User);
-            return data;
-          },
-        },
-      };
-      return fn(tx);
-    },
-  } as unknown as PrismaClient;
+class FakeTransactionRunner implements TransactionRunner {
+  constructor(
+    private readonly userStore: User[],
+    private readonly accountStore: Account[],
+  ) {}
+
+  async createAccountWithOwner(data: CreateAccountWithOwnerData): Promise<void> {
+    this.accountStore.push({ id: data.accountId, name: data.accountName, createdAt: data.now } as unknown as Account);
+    this.userStore.push({
+      id: data.userId,
+      accountId: data.accountId,
+      name: data.userName,
+      email: Email.create(data.email),
+      passwordHash: data.passwordHash,
+    } as unknown as User);
+  }
+
+  async acceptInvite(_data: AcceptInviteTransactionData): Promise<void> {
+    throw new Error("not expected in RegisterAccountUseCase tests");
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -88,7 +87,7 @@ function buildFakePrisma(userStore: User[], accountStore: Account[]): PrismaClie
 function makeUseCase(users?: UserRepository, accounts?: AccountRepository) {
   const uRepo = users as FakeUserRepository ?? new FakeUserRepository();
   const aRepo = accounts as FakeAccountRepository ?? new FakeAccountRepository();
-  return new RegisterAccountUseCase(uRepo, aRepo, new FakePasswordHasher(), buildFakePrisma(uRepo.store, aRepo.store));
+  return new RegisterAccountUseCase(uRepo, aRepo, new FakePasswordHasher(), new FakeTransactionRunner(uRepo.store, aRepo.store));
 }
 
 // ---------------------------------------------------------------------------
@@ -103,7 +102,7 @@ describe("RegisterAccountUseCase", () => {
   beforeEach(() => {
     userRepo = new FakeUserRepository();
     accountRepo = new FakeAccountRepository();
-    useCase = new RegisterAccountUseCase(userRepo, accountRepo, new FakePasswordHasher(), buildFakePrisma(userRepo.store, accountRepo.store));
+    useCase = new RegisterAccountUseCase(userRepo, accountRepo, new FakePasswordHasher(), new FakeTransactionRunner(userRepo.store, accountRepo.store));
   });
 
   describe("sucesso", () => {

@@ -38,7 +38,6 @@ class FakeUserRepository implements UserRepository {
     return this.countMap.get(accountId) ?? 0;
   }
   async create(user: User): Promise<User> { this.users.push(user); return user; }
-  async update(user: User): Promise<User> { return user; }
 }
 
 class FakeAccountRepository implements AccountRepository {

@@ -2,6 +2,7 @@ import { prisma } from "@/infrastructure/database/prisma.client";
 import { PrismaUserRepository } from "@/infrastructure/database/repositories/prisma-user.repository";
 import { PrismaAccountRepository } from "@/infrastructure/database/repositories/prisma-account.repository";
 import { PrismaInviteRepository } from "@/infrastructure/database/repositories/prisma-invite.repository";
+import { PrismaTransactionRunner } from "@/infrastructure/database/prisma-transaction-runner";
 import { Argon2PasswordHasher } from "@/infrastructure/auth/password-hasher";
 import { RandomHexTokenGenerator } from "@/infrastructure/auth/token-generator";
 import { NoopMailer } from "@/infrastructure/mailer/noop.mailer";
@@ -15,15 +16,20 @@ const baseUrl =
 export const userRepository = new PrismaUserRepository(prisma);
 export const accountRepository = new PrismaAccountRepository(prisma);
 export const inviteRepository = new PrismaInviteRepository(prisma);
+export const txRunner = new PrismaTransactionRunner(prisma);
 export const hasher = new Argon2PasswordHasher();
 export const tokenGenerator = new RandomHexTokenGenerator();
+
+if (process.env.NODE_ENV === "production") {
+  throw new Error("NoopMailer cannot be used in production — wire a real Mailer implementation");
+}
 export const mailer = new NoopMailer();
 
 export const registerAccountUseCase = new RegisterAccountUseCase(
   userRepository,
   accountRepository,
   hasher,
-  prisma,
+  txRunner,
 );
 
 export const inviteUserUseCase = new InviteUserUseCase(
@@ -39,5 +45,5 @@ export const acceptInviteUseCase = new AcceptInviteUseCase(
   inviteRepository,
   userRepository,
   hasher,
-  prisma,
+  txRunner,
 );

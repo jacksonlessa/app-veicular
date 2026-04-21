@@ -17,10 +17,10 @@ describe("InviteToken VO", () => {
       expect(token.value).toBe(long);
     });
 
-    it("accepts uppercase hex chars", () => {
+    it("accepts uppercase hex chars and normalizes to lowercase", () => {
       const upper = VALID_TOKEN.toUpperCase();
       const token = InviteToken.create(upper);
-      expect(token.value).toBe(upper);
+      expect(token.value).toBe(upper.toLowerCase());
     });
 
     it("trims surrounding whitespace before validation", () => {

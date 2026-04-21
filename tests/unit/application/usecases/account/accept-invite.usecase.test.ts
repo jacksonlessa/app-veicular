@@ -9,7 +9,7 @@ import { Email } from "@/domain/shared/value-objects/email.vo";
 import { InviteToken } from "@/domain/shared/value-objects/invite-token.vo";
 import type { PasswordHasher } from "@/application/ports/password-hasher";
 import { User } from "@/domain/account/entities/user.entity";
-import type { PrismaClient } from "@prisma/client";
+import type { TransactionRunner, CreateAccountWithOwnerData, AcceptInviteTransactionData } from "@/application/ports/transaction-runner";
 
 // ─── Fakes ────────────────────────────────────────────────────────────────────
 
@@ -103,30 +103,31 @@ class FakePasswordHasher implements PasswordHasher {
   }
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+class FakeTransactionRunner implements TransactionRunner {
+  lastAcceptData: AcceptInviteTransactionData | null = null;
 
-function buildFakePrisma(inviteRepo: FakeInviteRepository, userRepo: FakeUserRepository): PrismaClient {
-  return {
-    $transaction: async (fn: (tx: unknown) => Promise<unknown>) => {
-      const tx = {
-        user: {
-          create: async ({ data }: { data: { id: string; accountId: string; name: string; email: string; passwordHash: string; createdAt: Date } }) => {
-            userRepo.store.push(User.rehydrate({ id: data.id, accountId: data.accountId, name: data.name, email: Email.create(data.email), passwordHash: data.passwordHash, createdAt: data.createdAt }));
-            return data;
-          },
-        },
-        invite: {
-          update: async ({ where, data }: { where: { id: string }; data: { status: string } }) => {
-            const invite = inviteRepo.store.find((i) => i.id === where.id);
-            if (invite) Object.assign(invite, { _status: data.status });
-            return {};
-          },
-        },
-      };
-      return fn(tx);
-    },
-  } as unknown as PrismaClient;
+  constructor(private readonly userRepo: FakeUserRepository) {}
+
+  async createAccountWithOwner(_data: CreateAccountWithOwnerData): Promise<void> {
+    throw new Error("not expected in AcceptInviteUseCase tests");
+  }
+
+  async acceptInvite(data: AcceptInviteTransactionData): Promise<void> {
+    this.lastAcceptData = data;
+    this.userRepo.store.push(
+      User.rehydrate({
+        id: data.userId,
+        accountId: data.accountId,
+        name: data.name,
+        email: Email.create(data.email),
+        passwordHash: data.passwordHash,
+        createdAt: data.now,
+      }),
+    );
+  }
 }
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function buildSut(opts?: {
   invite?: Invite | null;
@@ -135,6 +136,7 @@ function buildSut(opts?: {
   const inviteRepo = new FakeInviteRepository();
   const userRepo = new FakeUserRepository();
   const hasher = new FakePasswordHasher();
+  const txRunner = new FakeTransactionRunner(userRepo);
 
   if (opts?.invite !== null) {
     inviteRepo.seed(opts?.invite ?? makePendingInvite());
@@ -143,8 +145,8 @@ function buildSut(opts?: {
     userRepo.setCount(opts.userCount);
   }
 
-  const sut = new AcceptInviteUseCase(inviteRepo, userRepo, hasher, buildFakePrisma(inviteRepo, userRepo));
-  return { sut, inviteRepo, userRepo };
+  const sut = new AcceptInviteUseCase(inviteRepo, userRepo, hasher, txRunner);
+  return { sut, inviteRepo, userRepo, txRunner };
 }
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
@@ -283,12 +285,10 @@ describe("AcceptInviteUseCase", () => {
       expect(stored[0].accountId).toBe(ACCOUNT_ID);
     });
 
-    it("marks the invite as accepted via prisma transaction", async () => {
-      const { sut, inviteRepo } = buildSut();
+    it("calls txRunner.acceptInvite with the invite id", async () => {
+      const { sut, txRunner } = buildSut();
       await sut.execute({ token: VALID_TOKEN_STR, name: "Bob", password: "password123" });
-      // The invite status is updated via raw prisma; the fake tx sets _status
-      const stored = inviteRepo.getStored();
-      expect((stored[0] as unknown as { _status: string })._status).toBe("accepted");
+      expect(txRunner.lastAcceptData?.inviteId).toBe("inv-1");
     });
 
     it("creates user with the email from the invite", async () => {

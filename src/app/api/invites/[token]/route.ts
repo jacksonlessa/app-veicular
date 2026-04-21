@@ -6,7 +6,7 @@ import { z } from "zod";
 
 export const runtime = "nodejs";
 
-const AcceptSchema = z.object({ name: z.string().min(1), password: z.string().min(8) });
+const AcceptSchema = z.object({ name: z.string().min(1).max(100), password: z.string().min(8) });
 
 export async function GET(_req: Request, { params }: { params: Promise<{ token: string }> }) {
   const { token: tokenParam } = await params;
@@ -16,7 +16,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ token: 
     if (!invite) return NextResponse.json({ error: "invite.not_found" }, { status: 404 });
     if (!invite.isUsable(new Date())) return NextResponse.json({ error: "invite.expired_or_used" }, { status: 410 });
     const account = await accountRepository.findById(invite.accountId);
-    return NextResponse.json({ email: invite.email.value, accountName: account!.name });
+    if (!account) return NextResponse.json({ error: "internal" }, { status: 500 });
+    return NextResponse.json({ email: invite.email.value, accountName: account.name });
   } catch (e) {
     return mapDomainError(e);
   }

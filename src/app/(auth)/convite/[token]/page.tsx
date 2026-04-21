@@ -1,5 +1,3 @@
-import { inviteRepository, accountRepository } from "@/infrastructure/container";
-import { InviteToken } from "@/domain/shared/value-objects/invite-token.vo";
 import AcceptInviteForm from "@/components/auth/AcceptInviteForm";
 import InviteError from "@/components/auth/InviteError";
 
@@ -9,23 +7,27 @@ export default async function ConvitePage({
   params: Promise<{ token: string }>;
 }) {
   const { token: tokenParam } = await params;
-  try {
-    const token = InviteToken.create(tokenParam);
-    const invite = await inviteRepository.findByToken(token);
-    if (!invite || !invite.isUsable(new Date())) {
-      return (
-        <InviteError status={!invite ? "not_found" : "expired_or_used"} />
-      );
-    }
-    const account = await accountRepository.findById(invite.accountId);
-    return (
-      <AcceptInviteForm
-        token={tokenParam}
-        email={invite.email.value}
-        accountName={account!.name}
-      />
-    );
-  } catch {
-    return <InviteError status="not_found" />;
+
+  const baseUrl =
+    process.env.NEXTAUTH_URL ?? process.env.APP_BASE_URL ?? "http://localhost:3000";
+
+  const res = await fetch(`${baseUrl}/api/invites/${encodeURIComponent(tokenParam)}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    const body = (await res.json().catch(() => ({}))) as { error?: string };
+    const status =
+      body.error === "invite.expired_or_used" ? "expired_or_used" : "not_found";
+    return <InviteError status={status} />;
   }
+
+  const { email, accountName } = (await res.json()) as {
+    email: string;
+    accountName: string;
+  };
+
+  return (
+    <AcceptInviteForm token={tokenParam} email={email} accountName={accountName} />
+  );
 }
