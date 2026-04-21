@@ -8,5 +8,5 @@
 - [x] 4.0 Container + Error handler — registrar use cases e mapear novos erros
 - [x] 5.0 API routes — `/api/vehicles` e `/api/vehicles/[id]`
 - [x] 6.0 Testes — unitários (use cases) e integração (PrismaVehicleRepository)
-- [ ] 7.0 Frontend Dashboard — VehicleCard + página `/dashboard` + onboarding EmptyState
+- [x] 7.0 Frontend Dashboard — VehicleCard + página `/dashboard` + onboarding EmptyState
 - [ ] 8.0 Frontend Configurações — VehicleForm + DeleteDialog + página `/configuracoes`
