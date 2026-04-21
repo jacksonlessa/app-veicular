@@ -13,7 +13,8 @@ const UpdateVehicleSchema = z.object({
   currentOdometer: z.number().int().nonnegative().optional(),
 });
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "unauthenticated" }, { status: 401 });
 
@@ -23,7 +24,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
   try {
     const out = await updateVehicleUseCase.execute({
-      vehicleId: params.id,
+      vehicleId: id,
       accountId: session.accountId,
       ...parsed.data,
     });
@@ -33,13 +34,14 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: "unauthenticated" }, { status: 401 });
 
   try {
     await deleteVehicleUseCase.execute({
-      vehicleId: params.id,
+      vehicleId: id,
       accountId: session.accountId,
     });
     return new NextResponse(null, { status: 204 });
