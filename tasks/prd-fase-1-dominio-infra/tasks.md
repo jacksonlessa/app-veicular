@@ -4,7 +4,7 @@
 
 - [x] 1.0 Setup de Vitest, argon2 e eslint-plugin-boundaries
 - [x] 2.0 Shared domain: ValueObject, DomainError, Email, InviteToken
-- [ ] 3.0 Account context: entities Account e User + repo interfaces
+- [x] 3.0 Account context: entities Account e User + repo interfaces
 - [ ] 4.0 Vehicle context: VOs + Vehicle entity + repo interface
 - [ ] 5.0 Fuel context: VOs + Fuelup entity + repo interface
 - [ ] 6.0 FuelupService: regra dos 3 campos + cálculo condicional de km/l
