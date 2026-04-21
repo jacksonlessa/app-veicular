@@ -11,7 +11,7 @@
 - [x] 7.0 Maintenance context: VOs + Maintenance e MaintenanceItem + repo interface
 - [x] 8.0 Mailer port (application) + NoopMailer
 - [x] 9.0 Repositórios Prisma (Account/User completos, demais com stubs)
-- [ ] 10.0 Infra auth: Argon2PasswordHasher, nextauth.config e container
+- [x] 10.0 Infra auth: Argon2PasswordHasher, nextauth.config e container
 - [ ] 11.0 Validação manual: seed script e login funcional
 
 ## Grafo de Dependências
