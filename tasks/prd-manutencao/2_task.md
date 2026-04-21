@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: completed
 parallelizable: true
 blocked_by: []
 ---
@@ -28,11 +28,11 @@ Implementa a interface `MaintenanceRepository` usando Prisma, com os dois métod
 
 ## Subtarefas
 
-- [ ] 2.1 Criar `prisma-maintenance.repository.ts` com `findById`
-- [ ] 2.2 Adicionar `findByVehicleId` com `orderBy: { date: "desc" }`
-- [ ] 2.3 Implementar `toEntity()` (mapper privado) mapeando `location → description` e construindo itens
-- [ ] 2.4 Escrever teste de integração em `src/__tests__/integration/prisma-maintenance.repository.test.ts`
-- [ ] 2.5 Rodar `npm test` verde
+- [x] 2.1 Criar `prisma-maintenance.repository.ts` com `findById`
+- [x] 2.2 Adicionar `findByVehicleId` com `orderBy: { date: "desc" }`
+- [x] 2.3 Implementar `toEntity()` (mapper privado) mapeando `location → description` e construindo itens
+- [x] 2.4 Escrever teste de integração em `src/__tests__/integration/prisma-maintenance.repository.test.ts`
+- [x] 2.5 Rodar `npm test` verde
 
 ## Detalhes de Implementação
 
