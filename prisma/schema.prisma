@@ -50,6 +50,7 @@ model Vehicle {
   initOdometer    Int
   currentOdometer Int
   createdAt       DateTime      @default(now())
+  deletedAt       DateTime?
   account         Account       @relation(fields: [accountId], references: [id])
   fuelups         Fuelup[]
   maintenances    Maintenance[]
