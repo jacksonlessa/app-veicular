@@ -6,14 +6,14 @@
 - [x] 2.0 Domínio Invite: entidade + InviteRepository interface + testes
 - [x] 3.0 Estender UserRepository.countByAccount (interface + Prisma + teste)
 - [x] 4.0 TokenGenerator port + impl crypto.randomBytes + teste
-- [ ] 5.0 PrismaInviteRepository + teste
-- [ ] 6.0 RegisterAccountUseCase + teste
-- [ ] 7.0 InviteUserUseCase + teste
-- [ ] 8.0 AcceptInviteUseCase + teste
+- [x] 5.0 PrismaInviteRepository + teste
+- [x] 6.0 RegisterAccountUseCase + teste
+- [x] 7.0 InviteUserUseCase + teste
+- [x] 8.0 AcceptInviteUseCase + teste
 - [ ] 9.0 Container wiring + helper error-handler (domínio → HTTP)
 - [ ] 10.0 API route POST /api/auth/register
 - [ ] 11.0 API routes /api/invites (POST) e /api/invites/[token] (GET/POST)
-- [ ] 12.0 Auth guard: middleware.ts + app/(app)/layout.tsx
+- [x] 12.0 Auth guard: middleware.ts + app/(app)/layout.tsx
 - [ ] 13.0 Páginas e forms: /cadastro, /login, /convite/[token]
 - [ ] 14.0 Smoke test manual + atualização de docs de validação
 
