@@ -14,8 +14,8 @@
 - [x] 10.0 API route POST /api/auth/register
 - [x] 11.0 API routes /api/invites (POST) e /api/invites/[token] (GET/POST)
 - [x] 12.0 Auth guard: middleware.ts + app/(app)/layout.tsx
-- [ ] 13.0 Páginas e forms: /cadastro, /login, /convite/[token]
-- [ ] 14.0 Smoke test manual + atualização de docs de validação
+- [x] 13.0 Páginas e forms: /cadastro, /login, /convite/[token]
+- [x] 14.0 Smoke test manual + atualização de docs de validação
 
 ## Grafo de Dependências
 
