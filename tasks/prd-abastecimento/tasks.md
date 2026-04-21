@@ -8,7 +8,7 @@
 - [x] 4.0 `RegisterFuelupUseCase` + testes unitários
 - [x] 5.0 `UpdateFuelupUseCase` + `DeleteFuelupUseCase` + testes unitários
 - [x] 6.0 `ListFuelupsUseCase` + `GetFuelupUseCase` + testes unitários
-- [ ] 7.0 Container wiring + mapeamento de novos erros no error-handler
+- [x] 7.0 Container wiring + mapeamento de novos erros no error-handler
 - [ ] 8.0 API routes `/api/fuelups` (GET/POST) e `/api/fuelups/[id]` (GET/PUT/DELETE)
 - [x] 9.0 Hook `useFuelupCalculator` + `FuelupForm` + Zod schema client-side
 - [ ] 10.0 Páginas `/abastecimento` (criar) e `/abastecimento/[id]` (editar)
