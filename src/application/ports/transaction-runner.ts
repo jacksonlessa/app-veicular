@@ -19,7 +19,36 @@ export interface AcceptInviteTransactionData {
   now: Date;
 }
 
+export interface SaveFuelupData {
+  mode: "create" | "update";
+  fuelup: {
+    id: string;
+    vehicleId: string;
+    userId: string;
+    date: Date;
+    odometer: number;
+    fuelType: string;
+    fullTank: boolean;
+    liters: number;
+    pricePerLiter: number;
+    totalPrice: number;
+    kmPerLiter: number | null;
+  };
+  recomputed: Array<{ id: string; kmPerLiter: number | null }>;
+  vehicleId: string;
+  newCurrentOdometer: number;
+}
+
+export interface DeleteFuelupData {
+  fuelupId: string;
+  recomputed: Array<{ id: string; kmPerLiter: number | null }>;
+  vehicleId: string;
+  newCurrentOdometer: number;
+}
+
 export interface TransactionRunner {
   createAccountWithOwner(data: CreateAccountWithOwnerData): Promise<void>;
   acceptInvite(data: AcceptInviteTransactionData): Promise<void>;
+  saveFuelup(data: SaveFuelupData): Promise<void>;
+  deleteFuelup(data: DeleteFuelupData): Promise<void>;
 }

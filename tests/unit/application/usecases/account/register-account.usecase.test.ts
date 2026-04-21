@@ -8,7 +8,7 @@ import { BusinessRuleError } from "@/domain/shared/errors/business-rule.error";
 import { InvalidValueError } from "@/domain/shared/errors/invalid-value.error";
 import { Email } from "@/domain/shared/value-objects/email.vo";
 import type { PasswordHasher } from "@/application/ports/password-hasher";
-import type { TransactionRunner, CreateAccountWithOwnerData, AcceptInviteTransactionData } from "@/application/ports/transaction-runner";
+import type { TransactionRunner, CreateAccountWithOwnerData, AcceptInviteTransactionData, SaveFuelupData, DeleteFuelupData } from "@/application/ports/transaction-runner";
 
 // ---------------------------------------------------------------------------
 // Fakes em memória
@@ -76,6 +76,14 @@ class FakeTransactionRunner implements TransactionRunner {
   }
 
   async acceptInvite(_data: AcceptInviteTransactionData): Promise<void> {
+    throw new Error("not expected in RegisterAccountUseCase tests");
+  }
+
+  async saveFuelup(_data: SaveFuelupData): Promise<void> {
+    throw new Error("not expected in RegisterAccountUseCase tests");
+  }
+
+  async deleteFuelup(_data: DeleteFuelupData): Promise<void> {
     throw new Error("not expected in RegisterAccountUseCase tests");
   }
 }
