@@ -6,6 +6,7 @@ export default defineConfig({
     environment: "node",
     coverage: { provider: "v8", reporter: ["text", "html"] },
     passWithNoTests: true,
+    exclude: ["**/node_modules/**", "**/.claude/worktrees/**"],
   },
   resolve: { alias: { "@": path.resolve(__dirname, "src") } },
 });
