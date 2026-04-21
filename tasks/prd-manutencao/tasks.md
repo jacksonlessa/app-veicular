@@ -2,14 +2,14 @@
 
 ## Tarefas
 
-- [ ] 1.0 Estender `TransactionRunner` com `saveMaintenance` e `deleteMaintenance`
+- [x] 1.0 Estender `TransactionRunner` com `saveMaintenance` e `deleteMaintenance`
 - [ ] 2.0 Implementar `PrismaMaintenanceRepository` + teste de integração
 - [ ] 3.0 Domain: Value Objects + entidades `Maintenance`/`MaintenanceItem` + interface do repositório + testes unitários
 - [ ] 4.0 `RegisterMaintenanceUseCase` + `UpdateMaintenanceUseCase` + testes unitários
 - [ ] 5.0 `DeleteMaintenanceUseCase` + `ListMaintenancesUseCase` + `GetMaintenanceUseCase` + testes unitários
 - [ ] 6.0 Container wiring + mapeamento de erros no error-handler
 - [ ] 7.0 API routes `/api/maintenances` (GET/POST) e `/api/maintenances/[id]` (GET/PUT/DELETE)
-- [ ] 8.0 `MaintenanceItemRow` + `MaintenanceForm` + Zod schema client-side
+- [x] 8.0 `MaintenanceItemRow` + `MaintenanceForm` + Zod schema client-side
 - [ ] 9.0 Páginas `/manutencao` (criar) e `/manutencao/[id]` (editar)
 - [ ] 10.0 `MaintenanceHistoryList` + aba Manutenções em `VehicleDetailView` + botão no `VehicleCard`
 - [ ] 11.0 Smoke test manual + `validation.md`
