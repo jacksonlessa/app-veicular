@@ -147,6 +147,7 @@ export default async function ConfiguracoesPage() {
                 {/* Actions */}
                 <div className="flex gap-2.5">
                   <VehicleForm
+                    key={vehicle.id}
                     vehicle={vehicle}
                     trigger={
                       <button className="flex-1 flex items-center justify-center gap-1.5 h-10 rounded-xl border border-[#E5E2DA] text-[#1A1814] text-[13px] font-semibold hover:bg-[#F8F7F3] transition-colors">

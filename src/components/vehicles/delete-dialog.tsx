@@ -12,6 +12,7 @@ interface DeleteDialogProps {
 
 export function DeleteDialog({ vehicleId, vehicleName, trigger }: DeleteDialogProps) {
   const router = useRouter();
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -26,6 +27,7 @@ export function DeleteDialog({ vehicleId, vehicleName, trigger }: DeleteDialogPr
         setError("Erro ao remover veículo. Tente novamente.");
         return;
       }
+      setOpen(false);
       router.refresh();
     } catch {
       setError("Erro de conexão. Tente novamente.");
@@ -35,7 +37,13 @@ export function DeleteDialog({ vehicleId, vehicleName, trigger }: DeleteDialogPr
   }
 
   return (
-    <AlertDialog.Root>
+    <AlertDialog.Root
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (!nextOpen) setError("");
+        setOpen(nextOpen);
+      }}
+    >
       <AlertDialog.Trigger render={trigger as React.ReactElement} />
 
       <AlertDialog.Portal>
