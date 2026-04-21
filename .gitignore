@@ -45,3 +45,9 @@ next-env.d.ts
 prisma/dev.db*
 
 /src/generated/prisma
+
+
+# docs and IA
+.claude/
+docs
+ia-docs/
