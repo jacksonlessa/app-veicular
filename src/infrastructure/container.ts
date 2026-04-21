@@ -14,6 +14,12 @@ import { ListVehiclesUseCase } from "@/application/usecases/vehicle/list-vehicle
 import { CreateVehicleUseCase } from "@/application/usecases/vehicle/create-vehicle.usecase";
 import { UpdateVehicleUseCase } from "@/application/usecases/vehicle/update-vehicle.usecase";
 import { DeleteVehicleUseCase } from "@/application/usecases/vehicle/delete-vehicle.usecase";
+import { PrismaFuelupRepository } from "@/infrastructure/database/repositories/prisma-fuelup.repository";
+import { RegisterFuelupUseCase } from "@/application/usecases/fuelup/register-fuelup.usecase";
+import { UpdateFuelupUseCase } from "@/application/usecases/fuelup/update-fuelup.usecase";
+import { DeleteFuelupUseCase } from "@/application/usecases/fuelup/delete-fuelup.usecase";
+import { ListFuelupsUseCase } from "@/application/usecases/fuelup/list-fuelups.usecase";
+import { GetFuelupUseCase } from "@/application/usecases/fuelup/get-fuelup.usecase";
 
 const baseUrl =
   process.env.NEXTAUTH_URL ?? process.env.APP_BASE_URL ?? "http://localhost:3000";
@@ -59,3 +65,11 @@ export const listVehiclesUseCase  = new ListVehiclesUseCase(vehicleRepository);
 export const createVehicleUseCase = new CreateVehicleUseCase(vehicleRepository);
 export const updateVehicleUseCase = new UpdateVehicleUseCase(vehicleRepository);
 export const deleteVehicleUseCase = new DeleteVehicleUseCase(vehicleRepository);
+
+export const fuelupRepository = new PrismaFuelupRepository(prisma);
+
+export const registerFuelupUseCase = new RegisterFuelupUseCase(fuelupRepository, vehicleRepository, txRunner);
+export const updateFuelupUseCase   = new UpdateFuelupUseCase(fuelupRepository, vehicleRepository, txRunner);
+export const deleteFuelupUseCase   = new DeleteFuelupUseCase(fuelupRepository, vehicleRepository, txRunner);
+export const listFuelupsUseCase    = new ListFuelupsUseCase(fuelupRepository, vehicleRepository);
+export const getFuelupUseCase      = new GetFuelupUseCase(fuelupRepository, vehicleRepository);
