@@ -34,11 +34,6 @@ describe("MaintenanceItem entity", () => {
       expect(item.subtotal).toBe(100);
     });
 
-    it("subtotal is 0 when unitPrice is 0", () => {
-      const item = MaintenanceItem.create(makeItemInput({ quantity: 3, unitPrice: 0 }));
-      expect(item.subtotal).toBe(0);
-    });
-
     it("calculates subtotal with float values", () => {
       const item = MaintenanceItem.create(makeItemInput({ quantity: 3, unitPrice: 10.5 }));
       expect(item.subtotal).toBeCloseTo(31.5, 6);
@@ -81,6 +76,7 @@ describe("MaintenanceItem entity", () => {
     it("rehydrates with existing VOs", () => {
       const item = MaintenanceItem.rehydrate({
         id: "item-2",
+        maintenanceId: "maint-1",
         description: "Pneu",
         quantity: ItemQuantity.create(4),
         unitPrice: ItemPrice.create(300),

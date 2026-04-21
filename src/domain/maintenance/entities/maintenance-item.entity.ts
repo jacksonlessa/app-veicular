@@ -4,6 +4,7 @@ import { ItemQuantity } from "@/domain/maintenance/value-objects/item-quantity.v
 
 interface MaintenanceItemProps {
   id: string;
+  maintenanceId: string;
   description: string;
   quantity: ItemQuantity;
   unitPrice: ItemPrice;
@@ -14,6 +15,7 @@ export class MaintenanceItem {
 
   static create(input: {
     id: string;
+    maintenanceId?: string;
     description: string;
     quantity: number;
     unitPrice: number;
@@ -25,6 +27,7 @@ export class MaintenanceItem {
 
     return new MaintenanceItem({
       id: input.id,
+      maintenanceId: input.maintenanceId ?? "",
       description,
       quantity: ItemQuantity.create(input.quantity),
       unitPrice: ItemPrice.create(input.unitPrice),
@@ -37,6 +40,10 @@ export class MaintenanceItem {
 
   get id(): string {
     return this.props.id;
+  }
+
+  get maintenanceId(): string {
+    return this.props.maintenanceId;
   }
 
   get description(): string {

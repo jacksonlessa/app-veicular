@@ -4,11 +4,6 @@ import { ItemPrice } from "@/domain/maintenance/value-objects/item-price.vo";
 
 describe("ItemPrice VO", () => {
   describe("create — happy path", () => {
-    it("accepts zero (free item)", () => {
-      const p = ItemPrice.create(0);
-      expect(p.value).toBe(0);
-    });
-
     it("accepts a positive integer", () => {
       const p = ItemPrice.create(50);
       expect(p.value).toBe(50);
@@ -26,6 +21,10 @@ describe("ItemPrice VO", () => {
   });
 
   describe("create — invalid inputs", () => {
+    it("throws InvalidValueError for zero", () => {
+      expect(() => ItemPrice.create(0)).toThrow(InvalidValueError);
+    });
+
     it("throws InvalidValueError for negative values", () => {
       expect(() => ItemPrice.create(-1)).toThrow(InvalidValueError);
     });

@@ -7,9 +7,13 @@ export class ItemPrice extends ValueObject<number> {
   }
 
   static create(input: number): ItemPrice {
-    if (typeof input !== "number" || isNaN(input) || input < 0) {
+    if (typeof input !== "number" || isNaN(input) || input <= 0) {
       throw new InvalidValueError("ItemPrice", input);
     }
     return new ItemPrice(input);
+  }
+
+  static rehydrate(value: number): ItemPrice {
+    return new ItemPrice(value);
   }
 }
