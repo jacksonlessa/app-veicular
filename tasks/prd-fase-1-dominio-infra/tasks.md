@@ -3,7 +3,7 @@
 ## Tarefas
 
 - [x] 1.0 Setup de Vitest, argon2 e eslint-plugin-boundaries
-- [ ] 2.0 Shared domain: ValueObject, DomainError, Email, InviteToken
+- [x] 2.0 Shared domain: ValueObject, DomainError, Email, InviteToken
 - [ ] 3.0 Account context: entities Account e User + repo interfaces
 - [ ] 4.0 Vehicle context: VOs + Vehicle entity + repo interface
 - [ ] 5.0 Fuel context: VOs + Fuelup entity + repo interface
