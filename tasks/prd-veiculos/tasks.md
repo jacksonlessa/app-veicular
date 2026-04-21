@@ -5,7 +5,7 @@
 - [x] 1.0 Migração Prisma — adicionar `deletedAt` ao modelo Vehicle
 - [x] 2.0 PrismaVehicleRepository — implementar os 5 métodos com soft delete
 - [x] 3.0 Use cases — ListVehicles, CreateVehicle, UpdateVehicle, DeleteVehicle
-- [ ] 4.0 Container + Error handler — registrar use cases e mapear novos erros
+- [x] 4.0 Container + Error handler — registrar use cases e mapear novos erros
 - [ ] 5.0 API routes — `/api/vehicles` e `/api/vehicles/[id]`
 - [ ] 6.0 Testes — unitários (use cases) e integração (PrismaVehicleRepository)
 - [ ] 7.0 Frontend Dashboard — VehicleCard + página `/dashboard` + onboarding EmptyState
