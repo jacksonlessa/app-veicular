@@ -9,6 +9,11 @@ import { NoopMailer } from "@/infrastructure/mailer/noop.mailer";
 import { RegisterAccountUseCase } from "@/application/usecases/account/register-account.usecase";
 import { InviteUserUseCase } from "@/application/usecases/account/invite-user.usecase";
 import { AcceptInviteUseCase } from "@/application/usecases/account/accept-invite.usecase";
+import { PrismaVehicleRepository } from "@/infrastructure/database/repositories/prisma-vehicle.repository";
+import { ListVehiclesUseCase } from "@/application/usecases/vehicle/list-vehicles.usecase";
+import { CreateVehicleUseCase } from "@/application/usecases/vehicle/create-vehicle.usecase";
+import { UpdateVehicleUseCase } from "@/application/usecases/vehicle/update-vehicle.usecase";
+import { DeleteVehicleUseCase } from "@/application/usecases/vehicle/delete-vehicle.usecase";
 
 const baseUrl =
   process.env.NEXTAUTH_URL ?? process.env.APP_BASE_URL ?? "http://localhost:3000";
@@ -47,3 +52,10 @@ export const acceptInviteUseCase = new AcceptInviteUseCase(
   hasher,
   txRunner,
 );
+
+export const vehicleRepository = new PrismaVehicleRepository(prisma);
+
+export const listVehiclesUseCase  = new ListVehiclesUseCase(vehicleRepository);
+export const createVehicleUseCase = new CreateVehicleUseCase(vehicleRepository);
+export const updateVehicleUseCase = new UpdateVehicleUseCase(vehicleRepository);
+export const deleteVehicleUseCase = new DeleteVehicleUseCase(vehicleRepository);
