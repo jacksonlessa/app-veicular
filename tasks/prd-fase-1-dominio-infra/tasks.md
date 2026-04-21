@@ -12,7 +12,7 @@
 - [x] 8.0 Mailer port (application) + NoopMailer
 - [x] 9.0 Repositórios Prisma (Account/User completos, demais com stubs)
 - [x] 10.0 Infra auth: Argon2PasswordHasher, nextauth.config e container
-- [ ] 11.0 Validação manual: seed script e login funcional
+- [x] 11.0 Validação manual: seed script e login funcional
 
 ## Grafo de Dependências
 
