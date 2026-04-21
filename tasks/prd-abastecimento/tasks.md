@@ -13,7 +13,7 @@
 - [x] 9.0 Hook `useFuelupCalculator` + `FuelupForm` + Zod schema client-side
 - [x] 10.0 Páginas `/abastecimento` (criar) e `/abastecimento/[id]` (editar)
 - [x] 11.0 Página `/veiculos/[id]` com aba Abastecimentos + botão "Abastecer" no VehicleCard + km/l médio no dashboard
-- [ ] 12.0 Smoke test manual + `validation.md`
+- [x] 12.0 Smoke test manual + `validation.md`
 
 ## Grafo de Dependências
 
