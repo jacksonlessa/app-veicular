@@ -1,14 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { RegisterFuelupUseCase } from "@/application/usecases/fuelup/register-fuelup.usecase";
-import type { FuelupRepository } from "@/domain/fuel/repositories/fuelup.repository";
-import type { VehicleRepository } from "@/domain/vehicle/repositories/vehicle.repository";
-import type {
-  TransactionRunner,
-  SaveFuelupData,
-  DeleteFuelupData,
-  CreateAccountWithOwnerData,
-  AcceptInviteTransactionData,
-} from "@/application/ports/transaction-runner";
 import { Fuelup } from "@/domain/fuel/entities/fuelup.entity";
 import { FuelAmount } from "@/domain/fuel/value-objects/fuel-amount.vo";
 import { FuelDate } from "@/domain/fuel/value-objects/fuel-date.vo";
@@ -17,105 +8,11 @@ import { Kml } from "@/domain/fuel/value-objects/kml.vo";
 import { Odometer } from "@/domain/vehicle/value-objects/odometer.vo";
 import { Vehicle } from "@/domain/vehicle/entities/vehicle.entity";
 import { VehicleName } from "@/domain/vehicle/value-objects/vehicle-name.vo";
-
-// ---------------------------------------------------------------------------
-// Fakes
-// ---------------------------------------------------------------------------
-
-class FakeFuelupRepository implements FuelupRepository {
-  private store: Fuelup[] = [];
-
-  seed(fuelups: Fuelup[]) {
-    this.store = [...fuelups];
-  }
-
-  async findById(id: string): Promise<Fuelup | null> {
-    return this.store.find((f) => f.id === id) ?? null;
-  }
-
-  async findByVehicle(vehicleId: string): Promise<Fuelup[]> {
-    return this.store
-      .filter((f) => f.vehicleId === vehicleId)
-      .sort((a, b) => {
-        const d = a.date.value.getTime() - b.date.value.getTime();
-        if (d !== 0) return d;
-        const o = a.odometer.value - b.odometer.value;
-        if (o !== 0) return o;
-        return a.createdAt.getTime() - b.createdAt.getTime();
-      });
-  }
-
-  async findByVehiclePaginated(vehicleId: string, page: number, pageSize: number) {
-    const all = await this.findByVehicle(vehicleId);
-    const start = (page - 1) * pageSize;
-    return { items: all.slice(start, start + pageSize), total: all.length };
-  }
-
-  async findLastByVehicle(vehicleId: string): Promise<Fuelup | null> {
-    const sorted = await this.findByVehicle(vehicleId);
-    return sorted[sorted.length - 1] ?? null;
-  }
-
-  async create(fuelup: Fuelup): Promise<Fuelup> {
-    this.store.push(fuelup);
-    return fuelup;
-  }
-
-  async update(fuelup: Fuelup): Promise<Fuelup> {
-    this.store = this.store.map((f) => (f.id === fuelup.id ? fuelup : f));
-    return fuelup;
-  }
-
-  async delete(id: string): Promise<void> {
-    this.store = this.store.filter((f) => f.id !== id);
-  }
-}
-
-class FakeVehicleRepository implements VehicleRepository {
-  private store: Vehicle[] = [];
-
-  seed(vehicles: Vehicle[]) {
-    this.store = [...vehicles];
-  }
-
-  async findById(id: string): Promise<Vehicle | null> {
-    return this.store.find((v) => v.id === id) ?? null;
-  }
-
-  async findByAccount(accountId: string): Promise<Vehicle[]> {
-    return this.store.filter((v) => v.accountId === accountId);
-  }
-
-  async create(vehicle: Vehicle): Promise<Vehicle> {
-    this.store.push(vehicle);
-    return vehicle;
-  }
-
-  async update(vehicle: Vehicle): Promise<Vehicle> {
-    this.store = this.store.map((v) => (v.id === vehicle.id ? vehicle : v));
-    return vehicle;
-  }
-
-  async delete(id: string): Promise<void> {
-    this.store = this.store.filter((v) => v.id !== id);
-  }
-}
-
-class FakeTransactionRunner implements TransactionRunner {
-  public lastSaveFuelupCall: SaveFuelupData | null = null;
-  public lastDeleteFuelupCall: DeleteFuelupData | null = null;
-
-  async createAccountWithOwner(_data: CreateAccountWithOwnerData): Promise<void> {}
-  async acceptInvite(_data: AcceptInviteTransactionData): Promise<void> {}
-
-  async saveFuelup(data: SaveFuelupData): Promise<void> {
-    this.lastSaveFuelupCall = data;
-  }
-
-  async deleteFuelup(data: DeleteFuelupData): Promise<void> {
-    this.lastDeleteFuelupCall = data;
-  }
-}
+import {
+  FakeFuelupRepository,
+  FakeVehicleRepository,
+  FakeTransactionRunner,
+} from "./_fakes";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -384,24 +281,15 @@ describe("RegisterFuelupUseCase", () => {
     });
   });
 
-  // Scenario 7: error — fuelup.total_mismatch
-  // FuelupService.compute always derives the third field consistently from the two provided.
-  // total_mismatch is thrown by Fuelup.create if the three computed values are inconsistent.
-  // We can force this by providing pricePerLiter + totalPrice where the derived liters value
-  // produces a totalPrice that diverges more than 0.01 when cross-checked.
-  // In practice, the entity will throw if liters*ppl != totalPrice with tolerance > 0.01.
-  describe("erro: fuelup.total_mismatch", () => {
-    it("throws when derived values produce a total_mismatch in entity creation", async () => {
+  // Scenario 7: sucesso — dois campos fornecidos → terceiro derivado corretamente (pricePerLiter + totalPrice)
+  // Nota: fuelup.total_mismatch não pode ser disparado pelo fluxo normal do use case porque
+  // FuelupService.compute sempre deriva o terceiro campo de forma coerente antes de chamar Fuelup.create.
+  // A cobertura de total_mismatch está nos testes da entidade: tests/unit/domain/fuel/fuelup.entity.test.ts
+  describe("sucesso: dois campos fornecidos → terceiro campo derivado corretamente", () => {
+    it("derives liters from pricePerLiter + totalPrice and creates fuelup successfully", async () => {
       vehicleRepo.seed([makeVehicle("v1", "acc-1")]);
 
-      // liters=40, pricePerLiter=5 → computed totalPrice = 200.00
-      // but passing totalPrice via pricePerLiter+totalPrice path: totalPrice=201, ppl=5 → liters=201/5=40.2
-      // then Fuelup.create checks: 40.2 * 5 = 201.0 — consistent → no error
-      // The only way total_mismatch fires is when Fuelup.create receives inconsistent three fields.
-      // Since FuelupService always computes the 3rd field consistently, this error cannot be
-      // triggered through the normal use case flow (the service ensures coherence).
-      // This scenario is properly covered by Fuelup entity unit tests.
-      // We verify the happy path instead: pricePerLiter + totalPrice path resolves correctly.
+      // pricePerLiter=5, totalPrice=200 → liters derived = 200/5 = 40
       const result = await useCase.execute({
         accountId: "acc-1",
         userId: "user-1",
