@@ -98,17 +98,17 @@ export function FuelupForm({
     // If this field was previously locked (calculated), unlock it and lock another
     if (locked === field) {
       // user is editing the calculated field — figure out which of the other two to lock
-      // find which two are now "free" after this change and lock the one with less info
-      // By default, lock the "third" remaining field
+      // Read current raw values, substituting the new value for the edited field
       const allFields: FuelField[] = ["liters", "pricePerLiter", "totalPrice"];
       const others = allFields.filter((f) => f !== field);
-      // Lock the first "other" that has a value
-      const hasFirst = others[0] === "liters"
-        ? !!parsePositiveNumber(litersRaw)
-        : others[0] === "pricePerLiter"
-        ? !!parsePositiveNumber(pplRaw)
-        : !!parsePositiveNumber(totalRaw);
 
+      const getRaw = (f: FuelField): string => {
+        if (f === "liters") return litersRaw;
+        if (f === "pricePerLiter") return pplRaw;
+        return totalRaw;
+      };
+
+      const hasFirst = !!parsePositiveNumber(getRaw(others[0]));
       setLocked(hasFirst ? others[1] : others[0]);
       return;
     }
@@ -276,7 +276,7 @@ export function FuelupForm({
           <Switch
             checked={fullTank}
             onCheckedChange={setFullTank}
-            className="data-checked:bg-amber-500"
+            className="data-[state=checked]:bg-amber-500"
             aria-label="Tanque cheio"
           />
         </div>
