@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { authOptions } from "@/infrastructure/auth/nextauth.config";
-import { listVehiclesUseCase } from "@/infrastructure/container";
+import { listVehiclesUseCase, listFuelupsUseCase } from "@/infrastructure/container";
 import { VehicleCard } from "@/components/ui/vehicle-card";
 
 export default async function DashboardPage() {
@@ -12,6 +12,27 @@ export default async function DashboardPage() {
   const { vehicles } = await listVehiclesUseCase.execute({
     accountId: session.accountId,
   });
+
+  // Fetch last kmPerLiter for each vehicle in parallel
+  // The list is ordered oldest-first, so we take the last item with a kmPerLiter value
+  const kmPerLiterMap: Record<string, number | null> = {};
+  await Promise.all(
+    vehicles.map(async (v) => {
+      try {
+        const { items } = await listFuelupsUseCase.execute({
+          accountId: session.accountId,
+          vehicleId: v.id,
+          page: 1,
+          pageSize: 200,
+        });
+        // Find the most recent fuelup that has kmPerLiter (list is oldest-first)
+        const lastWithKml = [...items].reverse().find((i) => i.kmPerLiter != null);
+        kmPerLiterMap[v.id] = lastWithKml?.kmPerLiter ?? null;
+      } catch {
+        kmPerLiterMap[v.id] = null;
+      }
+    })
+  );
 
   if (vehicles.length === 0) {
     return (
@@ -71,7 +92,7 @@ export default async function DashboardPage() {
           ! Seus veículos:
         </p>
         {vehicles.map((vehicle) => (
-          <VehicleCard key={vehicle.id} vehicle={vehicle} />
+          <VehicleCard key={vehicle.id} vehicle={vehicle} lastKmPerLiter={kmPerLiterMap[vehicle.id]} />
         ))}
       </div>
     </div>

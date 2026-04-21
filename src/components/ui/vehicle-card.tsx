@@ -5,6 +5,7 @@ import { VehicleDTO } from "@/application/dtos/vehicle.dto";
 
 interface VehicleCardProps {
   vehicle: VehicleDTO;
+  lastKmPerLiter?: number | null;
 }
 
 function CarIcon() {
@@ -83,7 +84,7 @@ function RoadIcon({ size = 14 }: { size?: number }) {
   );
 }
 
-export function VehicleCard({ vehicle }: VehicleCardProps) {
+export function VehicleCard({ vehicle, lastKmPerLiter }: VehicleCardProps) {
   const formattedOdometer = vehicle.currentOdometer.toLocaleString("pt-BR");
   const plate = vehicle.plate ?? "—";
 
@@ -123,23 +124,25 @@ export function VehicleCard({ vehicle }: VehicleCardProps) {
         </div>
         <div className="bg-[#F8F7F3] rounded-xl p-3">
           <p className="text-[11px] font-semibold text-[#A8A39C] uppercase tracking-wider mb-1">
-            Placa
+            Eficiência
           </p>
           <p className="text-[14px] font-bold text-[#1A1814] leading-tight">
-            {plate}
+            {lastKmPerLiter != null
+              ? lastKmPerLiter.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " km/l"
+              : "—"}
           </p>
         </div>
       </div>
 
       {/* Actions */}
       <div className="flex gap-2.5">
-        <button
-          disabled
-          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-amber-600 text-white text-[14px] font-semibold opacity-50 cursor-not-allowed"
+        <Link
+          href={`/abastecimento?vehicleId=${vehicle.id}`}
+          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl bg-amber-600 text-white text-[14px] font-semibold hover:bg-amber-700 transition-colors"
         >
           <FuelIcon size={15} />
           Abastecer
-        </button>
+        </Link>
         <button
           disabled
           className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl border border-amber-600 text-amber-600 text-[14px] font-semibold opacity-50 cursor-not-allowed"
