@@ -29,11 +29,15 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) (token as Record<string, unknown>).accountId = (user as unknown as Record<string, unknown>).accountId;
+      if (user) {
+        token.userId = user.id;
+        token.accountId = user.accountId;
+      }
       return token;
     },
     async session({ session, token }) {
-      (session as unknown as Record<string, unknown>).accountId = (token as Record<string, unknown>).accountId;
+      session.userId = token.userId;
+      session.accountId = token.accountId;
       return session;
     },
   },
