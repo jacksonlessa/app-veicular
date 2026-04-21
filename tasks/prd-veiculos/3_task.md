@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: completed
 parallelizable: false
 blocked_by: ["2.0"]
 ---
