@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Invite } from "@/domain/account/entities/invite.entity";
 import type { InviteProps, InviteStatus } from "@/domain/account/entities/invite.entity";
 import { BusinessRuleError } from "@/domain/shared/errors/business-rule.error";
+import { InvalidValueError } from "@/domain/shared/errors/invalid-value.error";
 import { Email } from "@/domain/shared/value-objects/email.vo";
 import { InviteToken } from "@/domain/shared/value-objects/invite-token.vo";
 
@@ -55,6 +56,14 @@ describe("Invite.create", () => {
     const invite = Invite.create({ ...baseInput, ttlHours: 24, now: fixedNow });
     const expectedExpiresAt = new Date(fixedNow.getTime() + 24 * 60 * 60 * 1000);
     expect(invite.expiresAt.getTime()).toBe(expectedExpiresAt.getTime());
+  });
+
+  it("throws InvalidValueError when ttlHours is zero", () => {
+    expect(() => Invite.create({ ...baseInput, ttlHours: 0, now: fixedNow })).toThrow(InvalidValueError);
+  });
+
+  it("throws InvalidValueError when ttlHours is negative", () => {
+    expect(() => Invite.create({ ...baseInput, ttlHours: -1, now: fixedNow })).toThrow(InvalidValueError);
   });
 });
 

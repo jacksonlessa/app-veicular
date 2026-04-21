@@ -1,4 +1,5 @@
 import { BusinessRuleError } from "@/domain/shared/errors/business-rule.error";
+import { InvalidValueError } from "@/domain/shared/errors/invalid-value.error";
 import { Email } from "@/domain/shared/value-objects/email.vo";
 import { InviteToken } from "@/domain/shared/value-objects/invite-token.vo";
 
@@ -25,6 +26,9 @@ export class Invite {
     ttlHours: number;
     now?: Date;
   }): Invite {
+    if (input.ttlHours <= 0) {
+      throw new InvalidValueError("Invite.ttlHours", input.ttlHours);
+    }
     const now = input.now ?? new Date();
     const expiresAt = new Date(now.getTime() + input.ttlHours * 60 * 60 * 1000);
     return new Invite({
@@ -78,8 +82,8 @@ export class Invite {
     return this.props.status === "pending" && !this.isExpired(now);
   }
 
-  markAccepted(): void {
-    if (!this.isUsable(new Date())) {
+  markAccepted(now: Date = new Date()): void {
+    if (!this.isUsable(now)) {
       throw new BusinessRuleError(
         "invite.expired_or_used",
         "Invite is not in a usable state (already accepted or expired).",
