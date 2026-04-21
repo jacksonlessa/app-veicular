@@ -9,7 +9,7 @@ import { Email } from "@/domain/shared/value-objects/email.vo";
 import { InviteToken } from "@/domain/shared/value-objects/invite-token.vo";
 import type { PasswordHasher } from "@/application/ports/password-hasher";
 import { User } from "@/domain/account/entities/user.entity";
-import type { TransactionRunner, CreateAccountWithOwnerData, AcceptInviteTransactionData, SaveFuelupData, DeleteFuelupData } from "@/application/ports/transaction-runner";
+import type { TransactionRunner, CreateAccountWithOwnerData, AcceptInviteTransactionData, SaveFuelupData, DeleteFuelupData, SaveMaintenanceData, DeleteMaintenanceData } from "@/application/ports/transaction-runner";
 
 // ─── Fakes ────────────────────────────────────────────────────────────────────
 
@@ -131,6 +131,14 @@ class FakeTransactionRunner implements TransactionRunner {
   }
 
   async deleteFuelup(_data: DeleteFuelupData): Promise<void> {
+    throw new Error("not expected in AcceptInviteUseCase tests");
+  }
+
+  async saveMaintenance(_data: SaveMaintenanceData): Promise<void> {
+    throw new Error("not expected in AcceptInviteUseCase tests");
+  }
+
+  async deleteMaintenance(_data: DeleteMaintenanceData): Promise<void> {
     throw new Error("not expected in AcceptInviteUseCase tests");
   }
 }

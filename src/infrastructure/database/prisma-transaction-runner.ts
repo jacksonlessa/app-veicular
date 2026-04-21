@@ -5,6 +5,8 @@ import type {
   AcceptInviteTransactionData,
   SaveFuelupData,
   DeleteFuelupData,
+  SaveMaintenanceData,
+  DeleteMaintenanceData,
 } from "@/application/ports/transaction-runner";
 
 export class PrismaTransactionRunner implements TransactionRunner {
@@ -75,6 +77,50 @@ export class PrismaTransactionRunner implements TransactionRunner {
         where: { id: data.vehicleId },
         data: { currentOdometer: data.newCurrentOdometer },
       });
+    });
+  }
+
+  async saveMaintenance(data: SaveMaintenanceData): Promise<void> {
+    await this.prisma.$transaction(async (tx) => {
+      if (data.mode === "update") {
+        await tx.maintenanceItem.deleteMany({
+          where: { maintenanceId: data.maintenance.id },
+        });
+      }
+      if (data.mode === "create") {
+        await tx.maintenance.create({
+          data: {
+            ...data.maintenance,
+            items: { create: data.items.map(({ id: _id, ...rest }) => rest) },
+          },
+        });
+      } else {
+        await tx.maintenance.update({
+          where: { id: data.maintenance.id },
+          data: {
+            ...data.maintenance,
+            items: { create: data.items.map(({ id: _id, ...rest }) => rest) },
+          },
+        });
+      }
+      if (data.newCurrentOdometer !== undefined) {
+        await tx.vehicle.update({
+          where: { id: data.vehicleId },
+          data: { currentOdometer: data.newCurrentOdometer },
+        });
+      }
+    });
+  }
+
+  async deleteMaintenance(data: DeleteMaintenanceData): Promise<void> {
+    await this.prisma.$transaction(async (tx) => {
+      await tx.maintenance.delete({ where: { id: data.maintenanceId } });
+      if (data.recalculateOdometer && data.newCurrentOdometer !== undefined) {
+        await tx.vehicle.update({
+          where: { id: data.vehicleId },
+          data: { currentOdometer: data.newCurrentOdometer },
+        });
+      }
     });
   }
 }

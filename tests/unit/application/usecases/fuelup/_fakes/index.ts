@@ -6,6 +6,8 @@ import type {
   DeleteFuelupData,
   CreateAccountWithOwnerData,
   AcceptInviteTransactionData,
+  SaveMaintenanceData,
+  DeleteMaintenanceData,
 } from "@/application/ports/transaction-runner";
 import { Fuelup } from "@/domain/fuel/entities/fuelup.entity";
 import { Vehicle } from "@/domain/vehicle/entities/vehicle.entity";
@@ -110,5 +112,13 @@ export class FakeTransactionRunner implements TransactionRunner {
 
   async deleteFuelup(data: DeleteFuelupData): Promise<void> {
     this.lastDeleteFuelupCall = data;
+  }
+
+  async saveMaintenance(_data: SaveMaintenanceData): Promise<void> {
+    throw new Error("not expected");
+  }
+
+  async deleteMaintenance(_data: DeleteMaintenanceData): Promise<void> {
+    throw new Error("not expected");
   }
 }
