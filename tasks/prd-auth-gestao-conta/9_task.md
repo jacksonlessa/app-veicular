@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 parallelizable: false
 blocked_by: ["5.0", "6.0", "7.0", "8.0"]
 ---
@@ -28,11 +28,11 @@ Registrar os novos componentes (`PrismaInviteRepository`, `RandomHexTokenGenerat
 
 ## Subtarefas
 
-- [ ] 9.1 Atualizar `src/infrastructure/container.ts`: `inviteRepository`, `tokenGenerator`, `registerAccountUseCase`, `inviteUserUseCase`, `acceptInviteUseCase`
-- [ ] 9.2 `baseUrl`: ler de `process.env.NEXTAUTH_URL` (ou `APP_BASE_URL` fallback)
-- [ ] 9.3 Criar `src/app/api/_lib/error-handler.ts` com `mapDomainError(e: unknown): NextResponse`
-- [ ] 9.4 Teste `tests/unit/app/api/error-handler.test.ts` cobrindo os 5 mapeamentos
-- [ ] 9.5 Rodar `npm test` e `npm run lint`
+- [x] 9.1 Atualizar `src/infrastructure/container.ts`: `inviteRepository`, `tokenGenerator`, `registerAccountUseCase`, `inviteUserUseCase`, `acceptInviteUseCase`
+- [x] 9.2 `baseUrl`: ler de `process.env.NEXTAUTH_URL` (ou `APP_BASE_URL` fallback)
+- [x] 9.3 Criar `src/app/api/_lib/error-handler.ts` com `mapDomainError(e: unknown): NextResponse`
+- [x] 9.4 Teste `tests/unit/app/api/error-handler.test.ts` cobrindo os 5 mapeamentos
+- [x] 9.5 Rodar `npm test` e `npm run lint`
 
 ## Detalhes de Implementação
 
