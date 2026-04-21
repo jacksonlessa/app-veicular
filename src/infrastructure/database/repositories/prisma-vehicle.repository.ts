@@ -1,11 +1,16 @@
-import type { PrismaClient, Vehicle as PrismaVehicle } from "@prisma/client";
+import type {
+  PrismaClient,
+  Vehicle as PrismaVehicle,
+  Prisma,
+} from "@prisma/client";
 import { Vehicle } from "@/domain/vehicle/entities/vehicle.entity";
 import type { VehicleRepository } from "@/domain/vehicle/repositories/vehicle.repository";
 import { VehicleName } from "@/domain/vehicle/value-objects/vehicle-name.vo";
 import { Plate } from "@/domain/vehicle/value-objects/plate.vo";
 import { Odometer } from "@/domain/vehicle/value-objects/odometer.vo";
+import { BusinessRuleError } from "@/domain/shared/errors/business-rule.error";
 
-function toEntity(raw: PrismaVehicle): Vehicle {
+export function toEntity(raw: PrismaVehicle): Vehicle {
   return Vehicle.rehydrate({
     id: raw.id,
     accountId: raw.accountId,
@@ -20,21 +25,10 @@ function toEntity(raw: PrismaVehicle): Vehicle {
   });
 }
 
-function toPersistence(vehicle: Vehicle): {
-  id: string;
-  accountId: string;
-  name: string;
-  plate: string | null;
-  brand: string;
-  model: string;
-  color: string;
-  initOdometer: number;
-  currentOdometer: number;
-  createdAt: Date;
-} {
+export function toPersistence(vehicle: Vehicle): Prisma.VehicleCreateInput {
   return {
     id: vehicle.id,
-    accountId: vehicle.accountId,
+    account: { connect: { id: vehicle.accountId } },
     name: vehicle.name.value,
     plate: vehicle.plate ? vehicle.plate.value : null,
     brand: vehicle.brand,
@@ -47,17 +41,17 @@ function toPersistence(vehicle: Vehicle): {
 }
 
 export class PrismaVehicleRepository implements VehicleRepository {
-  constructor(private readonly _prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaClient) {}
 
   async findById(id: string): Promise<Vehicle | null> {
-    const row = await this._prisma.vehicle.findFirst({
+    const row = await this.prisma.vehicle.findFirst({
       where: { id, deletedAt: null },
     });
     return row ? toEntity(row) : null;
   }
 
   async findByAccount(accountId: string): Promise<Vehicle[]> {
-    const rows = await this._prisma.vehicle.findMany({
+    const rows = await this.prisma.vehicle.findMany({
       where: { accountId, deletedAt: null },
       orderBy: { createdAt: "asc" },
     });
@@ -65,14 +59,26 @@ export class PrismaVehicleRepository implements VehicleRepository {
   }
 
   async create(vehicle: Vehicle): Promise<Vehicle> {
-    const data = toPersistence(vehicle);
-    const row = await this._prisma.vehicle.create({ data });
-    return toEntity(row);
+    try {
+      const data = toPersistence(vehicle);
+      const row = await this.prisma.vehicle.create({ data });
+      return toEntity(row);
+    } catch (e: unknown) {
+      if (
+        typeof e === "object" &&
+        e !== null &&
+        "code" in e &&
+        (e as { code: unknown }).code === "P2002"
+      ) {
+        throw new BusinessRuleError("vehicle.plate_duplicate");
+      }
+      throw e;
+    }
   }
 
   async update(vehicle: Vehicle): Promise<Vehicle> {
     const data = toPersistence(vehicle);
-    const row = await this._prisma.vehicle.update({
+    const row = await this.prisma.vehicle.update({
       where: { id: vehicle.id },
       data: {
         name: data.name,
@@ -87,7 +93,7 @@ export class PrismaVehicleRepository implements VehicleRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await this._prisma.vehicle.update({
+    await this.prisma.vehicle.update({
       where: { id },
       data: { deletedAt: new Date() },
     });
