@@ -11,8 +11,8 @@
 - [x] 7.0 Container wiring + mapeamento de novos erros no error-handler
 - [x] 8.0 API routes `/api/fuelups` (GET/POST) e `/api/fuelups/[id]` (GET/PUT/DELETE)
 - [x] 9.0 Hook `useFuelupCalculator` + `FuelupForm` + Zod schema client-side
-- [ ] 10.0 Páginas `/abastecimento` (criar) e `/abastecimento/[id]` (editar)
-- [ ] 11.0 Página `/veiculos/[id]` com aba Abastecimentos + botão "Abastecer" no VehicleCard + km/l médio no dashboard
+- [x] 10.0 Páginas `/abastecimento` (criar) e `/abastecimento/[id]` (editar)
+- [x] 11.0 Página `/veiculos/[id]` com aba Abastecimentos + botão "Abastecer" no VehicleCard + km/l médio no dashboard
 - [ ] 12.0 Smoke test manual + `validation.md`
 
 ## Grafo de Dependências
