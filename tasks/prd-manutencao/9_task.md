@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: completed
 parallelizable: false
 blocked_by: ["7.0", "8.0"]
 ---
@@ -28,9 +28,9 @@ Cria as duas páginas de formulário que consomem o `MaintenanceForm` (task 8.0)
 
 ## Subtarefas
 
-- [ ] 9.1 Criar `src/app/(app)/manutencao/page.tsx` renderizando `<MaintenanceForm />`
-- [ ] 9.2 Criar `src/app/(app)/manutencao/[id]/page.tsx` com fetch dos dados e `<MaintenanceForm defaultValues={...} maintenanceId={id} />`
-- [ ] 9.3 Adicionar `loading.tsx` em `manutencao/[id]/` (skeleton simples)
+- [x] 9.1 Criar `src/app/(app)/manutencao/page.tsx` renderizando `<MaintenanceForm />`
+- [x] 9.2 Criar `src/app/(app)/manutencao/[id]/page.tsx` com fetch dos dados e `<MaintenanceForm defaultValues={...} maintenanceId={id} />`
+- [x] 9.3 Adicionar `loading.tsx` em `manutencao/[id]/` (skeleton simples)
 - [ ] 9.4 Testar no browser: criar manutenção, editar, verificar redirecionamento pós-save
 - [ ] 9.5 Testar com `vehicleId` via query param na criação
 
