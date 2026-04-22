@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: completed
 parallelizable: false
 blocked_by: ["6.0"]
 ---
@@ -30,11 +30,11 @@ Cria os dois arquivos de route handler seguindo exatamente o padrão das rotas d
 
 ## Subtarefas
 
-- [ ] 7.1 Criar `src/app/api/maintenances/schema.ts` com `CreateMaintenanceSchema` e `UpdateMaintenanceSchema`
-- [ ] 7.2 Criar `src/app/api/maintenances/route.ts` com `GET` e `POST`
-- [ ] 7.3 Criar `src/app/api/maintenances/[id]/route.ts` com `GET`, `PUT`, `DELETE`
+- [x] 7.1 Criar `src/app/api/maintenances/schema.ts` com `CreateMaintenanceSchema` e `UpdateMaintenanceSchema`
+- [x] 7.2 Criar `src/app/api/maintenances/route.ts` com `GET` e `POST`
+- [x] 7.3 Criar `src/app/api/maintenances/[id]/route.ts` com `GET`, `PUT`, `DELETE`
 - [ ] 7.4 Testar manualmente com `curl` ou REST client: criar, listar, editar, deletar
-- [ ] 7.5 Rodar `npm run build` sem erros
+- [x] 7.5 Rodar `npm run build` sem erros
 
 ## Detalhes de Implementação
 
