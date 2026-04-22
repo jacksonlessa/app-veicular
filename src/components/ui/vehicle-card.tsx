@@ -143,13 +143,13 @@ export function VehicleCard({ vehicle, lastKmPerLiter }: VehicleCardProps) {
           <FuelIcon size={15} />
           Abastecer
         </Link>
-        <button
-          disabled
-          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl border border-amber-600 text-amber-600 text-[14px] font-semibold opacity-50 cursor-not-allowed"
+        <Link
+          href={`/manutencao?vehicleId=${vehicle.id}`}
+          className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl border border-amber-600 text-amber-600 text-[14px] font-semibold hover:bg-amber-50 transition-colors"
         >
           <WrenchIcon size={15} />
           Manutenção
-        </button>
+        </Link>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { VehicleDTO } from "@/application/dtos/vehicle.dto";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { FuelupHistoryList } from "@/components/fuelups/FuelupHistoryList";
+import { MaintenanceHistoryList } from "@/components/maintenances/MaintenanceHistoryList";
 
 function FuelIcon({ size = 16 }: { size?: number }) {
   return (
@@ -74,7 +75,7 @@ export function VehicleDetailView({ vehicle, defaultTab = "abastecimentos" }: Pr
             <TabsTrigger value="abastecimentos" className="flex-1">
               Abastecimentos
             </TabsTrigger>
-            <TabsTrigger value="manutencao" disabled className="flex-1">
+            <TabsTrigger value="manutencao" className="flex-1">
               Manutenção
             </TabsTrigger>
           </TabsList>
@@ -82,12 +83,7 @@ export function VehicleDetailView({ vehicle, defaultTab = "abastecimentos" }: Pr
             <FuelupHistoryList vehicleId={vehicle.id} />
           </TabsContent>
           <TabsContent value="manutencao">
-            <div className="py-10 text-center">
-              <p className="text-[14px] font-semibold text-[#6B6760]">Em breve (Fase 5)</p>
-              <p className="text-[13px] text-[#A8A39C] mt-1">
-                O módulo de manutenção será disponibilizado em breve.
-              </p>
-            </div>
+            <MaintenanceHistoryList vehicleId={vehicle.id} />
           </TabsContent>
         </Tabs>
       </div>
