@@ -7,7 +7,7 @@
 - [x] 3.0 Domain: Value Objects + entidades `Maintenance`/`MaintenanceItem` + interface do repositório + testes unitários
 - [x] 4.0 `RegisterMaintenanceUseCase` + `UpdateMaintenanceUseCase` + testes unitários
 - [x] 5.0 `DeleteMaintenanceUseCase` + `ListMaintenancesUseCase` + `GetMaintenanceUseCase` + testes unitários
-- [ ] 6.0 Container wiring + mapeamento de erros no error-handler
+- [x] 6.0 Container wiring + mapeamento de erros no error-handler
 - [ ] 7.0 API routes `/api/maintenances` (GET/POST) e `/api/maintenances/[id]` (GET/PUT/DELETE)
 - [x] 8.0 `MaintenanceItemRow` + `MaintenanceForm` + Zod schema client-side
 - [ ] 9.0 Páginas `/manutencao` (criar) e `/manutencao/[id]` (editar)
