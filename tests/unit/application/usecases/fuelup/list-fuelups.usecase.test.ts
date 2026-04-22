@@ -59,6 +59,7 @@ const mockFuelupRepo = {
   findByVehicle: vi.fn(),
   findByVehiclePaginated: vi.fn(),
   findLastByVehicle: vi.fn(),
+  findLastKmlByVehicle: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   delete: vi.fn(),

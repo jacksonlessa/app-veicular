@@ -6,7 +6,7 @@ export function mapDomainError(e: unknown): NextResponse {
   if (e instanceof InvalidValueError)
     return NextResponse.json({ error: "validation", field: e.field }, { status: 400 });
   if (e instanceof BusinessRuleError) {
-    if (e.code === "invite.not_found" || e.code === "vehicle.not_found" || e.code === "fuelup.not_found")
+    if (e.code === "invite.not_found" || e.code === "vehicle.not_found" || e.code === "fuelup.not_found" || e.code === "maintenance.not_found")
       return NextResponse.json({ error: e.code }, { status: 404 });
     if (e.code === "vehicle.not_owned")
       return NextResponse.json({ error: e.code }, { status: 403 });

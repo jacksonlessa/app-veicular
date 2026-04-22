@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: completed
 parallelizable: false
 blocked_by: ["4.0", "5.0"]
 ---
@@ -27,12 +27,12 @@ Registra o repositório e os 5 use cases novos no container de DI, e mapeia even
 
 ## Subtarefas
 
-- [ ] 6.1 Importar e instanciar `PrismaMaintenanceRepository` em `container.ts`
-- [ ] 6.2 Instanciar os 5 use cases passando repositório, `txRunner` e dependências necessárias
-- [ ] 6.3 Exportar os 5 use cases do container
-- [ ] 6.4 Revisar `error-handler.ts` e adicionar mapeamentos ausentes (se houver)
-- [ ] 6.5 Rodar `npm run build` e verificar que não há erros de tipo
-- [ ] 6.6 Rodar `npm test` verde
+- [x] 6.1 Importar e instanciar `PrismaMaintenanceRepository` em `container.ts`
+- [x] 6.2 Instanciar os 5 use cases passando repositório, `txRunner` e dependências necessárias
+- [x] 6.3 Exportar os 5 use cases do container
+- [x] 6.4 Revisar `error-handler.ts` e adicionar mapeamentos ausentes (se houver)
+- [x] 6.5 Rodar `npm run build` e verificar que não há erros de tipo
+- [x] 6.6 Rodar `npm test` verde
 
 ## Detalhes de Implementação
 

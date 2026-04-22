@@ -20,6 +20,12 @@ import { UpdateFuelupUseCase } from "@/application/usecases/fuelup/update-fuelup
 import { DeleteFuelupUseCase } from "@/application/usecases/fuelup/delete-fuelup.usecase";
 import { ListFuelupsUseCase } from "@/application/usecases/fuelup/list-fuelups.usecase";
 import { GetFuelupUseCase } from "@/application/usecases/fuelup/get-fuelup.usecase";
+import { PrismaMaintenanceRepository } from "@/infrastructure/database/repositories/prisma-maintenance.repository";
+import { RegisterMaintenanceUseCase } from "@/application/usecases/maintenance/register-maintenance.usecase";
+import { UpdateMaintenanceUseCase } from "@/application/usecases/maintenance/update-maintenance.usecase";
+import { DeleteMaintenanceUseCase } from "@/application/usecases/maintenance/delete-maintenance.usecase";
+import { GetMaintenanceUseCase } from "@/application/usecases/maintenance/get-maintenance.usecase";
+import { ListMaintenancesUseCase } from "@/application/usecases/maintenance/list-maintenances.usecase";
 
 const baseUrl =
   process.env.NEXTAUTH_URL ?? process.env.APP_BASE_URL ?? "http://localhost:3000";
@@ -73,3 +79,11 @@ export const updateFuelupUseCase   = new UpdateFuelupUseCase(fuelupRepository, v
 export const deleteFuelupUseCase   = new DeleteFuelupUseCase(fuelupRepository, vehicleRepository, txRunner);
 export const listFuelupsUseCase    = new ListFuelupsUseCase(fuelupRepository, vehicleRepository);
 export const getFuelupUseCase      = new GetFuelupUseCase(fuelupRepository, vehicleRepository);
+
+export const maintenanceRepository = new PrismaMaintenanceRepository(prisma);
+
+export const registerMaintenanceUseCase = new RegisterMaintenanceUseCase(maintenanceRepository, vehicleRepository, fuelupRepository, txRunner);
+export const updateMaintenanceUseCase   = new UpdateMaintenanceUseCase(maintenanceRepository, vehicleRepository, fuelupRepository, txRunner);
+export const deleteMaintenanceUseCase   = new DeleteMaintenanceUseCase(maintenanceRepository, fuelupRepository, vehicleRepository, txRunner);
+export const getMaintenanceUseCase      = new GetMaintenanceUseCase(maintenanceRepository, vehicleRepository);
+export const listMaintenancesUseCase    = new ListMaintenancesUseCase(maintenanceRepository, vehicleRepository);

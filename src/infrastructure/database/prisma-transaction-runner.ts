@@ -87,20 +87,18 @@ export class PrismaTransactionRunner implements TransactionRunner {
           where: { maintenanceId: data.maintenance.id },
         });
       }
+      const { odometer, ...maintenanceRest } = data.maintenance;
+      const maintenanceData = {
+        ...maintenanceRest,
+        odometer: odometer ?? undefined,
+        items: { create: data.items.map(({ id: _id, ...rest }) => rest) },
+      };
       if (data.mode === "create") {
-        await tx.maintenance.create({
-          data: {
-            ...data.maintenance,
-            items: { create: data.items.map(({ id: _id, ...rest }) => rest) },
-          },
-        });
+        await tx.maintenance.create({ data: maintenanceData });
       } else {
         await tx.maintenance.update({
           where: { id: data.maintenance.id },
-          data: {
-            ...data.maintenance,
-            items: { create: data.items.map(({ id: _id, ...rest }) => rest) },
-          },
+          data: maintenanceData,
         });
       }
       if (data.newCurrentOdometer !== undefined) {

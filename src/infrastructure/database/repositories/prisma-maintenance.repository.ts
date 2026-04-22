@@ -72,6 +72,7 @@ export class PrismaMaintenanceRepository implements MaintenanceRepository {
       // via the getter: quantity.value * unitPrice.value
       MaintenanceItem.rehydrate({
         id: item.id,
+        maintenanceId: item.maintenanceId,
         description: item.description,
         quantity: ItemQuantity.create(item.quantity),
         unitPrice: ItemPrice.create(item.unitPrice),

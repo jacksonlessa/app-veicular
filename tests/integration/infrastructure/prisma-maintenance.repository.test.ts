@@ -123,7 +123,7 @@ describe("PrismaMaintenanceRepository", () => {
       expect(result!.id).toBe(id);
       expect(result!.vehicleId).toBe(VEHICLE_ID);
       expect(result!.userId).toBe(USER_ID);
-      expect(result!.odometer.value).toBe(12000);
+      expect(result!.odometer?.value).toBe(12000);
       expect(result!.location).toBe("Revisão geral");
     });
 
