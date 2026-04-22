@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: completed
 parallelizable: false
 blocked_by: ["7.0"]
 ---
@@ -30,13 +30,13 @@ Habilita a aba "Manutenções" na tela do veículo e integra o componente de his
 
 ## Subtarefas
 
-- [ ] 10.1 Criar `src/components/maintenances/MaintenanceHistoryList.tsx`
-- [ ] 10.2 Implementar Accordion com shadcn/ui (`Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`)
-- [ ] 10.3 Implementar confirmação de exclusão inline (estado local `deletingId`) e chamada DELETE
-- [ ] 10.4 Adicionar `EmptyState` quando lista vazia
-- [ ] 10.5 Atualizar `VehicleDetailView.tsx`: remover `disabled`, importar e renderizar `MaintenanceHistoryList`
-- [ ] 10.6 Atualizar `VehicleCard.tsx`: adicionar botão "Manutenção"
-- [ ] 10.7 Testar no browser: criar manutenção, verificar na aba, expandir item, excluir
+- [x] 10.1 Criar `src/components/maintenances/MaintenanceHistoryList.tsx`
+- [x] 10.2 Implementar Accordion com shadcn/ui (`Accordion`, `AccordionItem`, `AccordionTrigger`, `AccordionContent`)
+- [x] 10.3 Implementar confirmação de exclusão inline (estado local `deletingId`) e chamada DELETE
+- [x] 10.4 Adicionar `EmptyState` quando lista vazia
+- [x] 10.5 Atualizar `VehicleDetailView.tsx`: remover `disabled`, importar e renderizar `MaintenanceHistoryList`
+- [x] 10.6 Atualizar `VehicleCard.tsx`: adicionar botão "Manutenção"
+- [x] 10.7 Testar no browser: criar manutenção, verificar na aba, expandir item, excluir
 
 ## Detalhes de Implementação
 
