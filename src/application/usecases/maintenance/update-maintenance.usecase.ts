@@ -42,7 +42,7 @@ export class UpdateMaintenanceUseCase {
       throw new BusinessRuleError("vehicle.not_owned");
 
     const allFuelups = await this.fuelups.findByVehicle(existing.vehicleId);
-    const allMaintenances = await this.maintenances.findByVehicleId(existing.vehicleId);
+    const allMaintenances = await this.maintenances.findByVehicle(existing.vehicleId);
     // Exclude the maintenance being updated from the odometer candidates
     const otherMaintenances = allMaintenances.filter((m) => m.id !== existing.id);
 

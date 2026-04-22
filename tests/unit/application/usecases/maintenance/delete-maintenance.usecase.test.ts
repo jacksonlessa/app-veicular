@@ -54,10 +54,6 @@ function makeVehicle(id = "vehicle-1", accountId = "account-1"): Vehicle {
 const mockMaintenanceRepo = {
   findById: vi.fn(),
   findByVehicle: vi.fn(),
-  findByUser: vi.fn(),
-  create: vi.fn(),
-  update: vi.fn(),
-  delete: vi.fn(),
 } satisfies Mocked<MaintenanceRepository>;
 
 const mockFuelupRepo = {
@@ -65,6 +61,7 @@ const mockFuelupRepo = {
   findByVehicle: vi.fn(),
   findByVehiclePaginated: vi.fn(),
   findLastByVehicle: vi.fn(),
+  findLastKmlByVehicle: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
   delete: vi.fn(),
@@ -81,6 +78,8 @@ const mockVehicleRepo = {
 const mockTxRunner = {
   createAccountWithOwner: vi.fn(),
   acceptInvite: vi.fn(),
+  saveFuelup: vi.fn(),
+  deleteFuelup: vi.fn(),
   saveMaintenance: vi.fn(),
   deleteMaintenance: vi.fn(),
 } satisfies Mocked<TransactionRunner>;

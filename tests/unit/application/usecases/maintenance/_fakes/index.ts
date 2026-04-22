@@ -25,7 +25,7 @@ export class FakeMaintenanceRepository implements MaintenanceRepository {
     return this.store.find((m) => m.id === id) ?? null;
   }
 
-  async findByVehicleId(vehicleId: string): Promise<Maintenance[]> {
+  async findByVehicle(vehicleId: string): Promise<Maintenance[]> {
     return this.store.filter((m) => m.vehicleId === vehicleId);
   }
 }

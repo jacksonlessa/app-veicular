@@ -52,10 +52,6 @@ function makeVehicle(id = "vehicle-1", accountId = "account-1"): Vehicle {
 const mockMaintenanceRepo = {
   findById: vi.fn(),
   findByVehicle: vi.fn(),
-  findByUser: vi.fn(),
-  create: vi.fn(),
-  update: vi.fn(),
-  delete: vi.fn(),
 } satisfies Mocked<MaintenanceRepository>;
 
 const mockVehicleRepo = {

@@ -78,7 +78,7 @@ model Maintenance {
   vehicleId  String
   userId     String
   date       DateTime
-  odometer   Int
+  odometer   Int?
   location   String?
   totalPrice Float
   createdAt  DateTime          @default(now())

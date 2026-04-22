@@ -40,7 +40,7 @@ export class RegisterMaintenanceUseCase {
       throw new BusinessRuleError("vehicle.not_owned");
 
     const allFuelups = await this.fuelups.findByVehicle(input.vehicleId);
-    const existingMaintenances = await this.maintenances.findByVehicleId(input.vehicleId);
+    const existingMaintenances = await this.maintenances.findByVehicle(input.vehicleId);
 
     const maintenanceId = randomUUID();
     const maintenanceItems = input.items.map((item) =>
