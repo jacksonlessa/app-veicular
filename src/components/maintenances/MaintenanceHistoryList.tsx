@@ -91,7 +91,7 @@ function MaintenanceAccordionItem({
           {/* Items grid */}
           <div className="mt-3">
             {/* Header row */}
-            <div className="grid grid-cols-4 gap-2 mb-2">
+            <div className="grid grid-cols-5 gap-2 mb-2">
               <p className="text-[10px] font-semibold text-[#A8A39C] uppercase tracking-wider col-span-2">
                 Descrição
               </p>
@@ -99,22 +99,28 @@ function MaintenanceAccordionItem({
                 Qtd
               </p>
               <p className="text-[10px] font-semibold text-[#A8A39C] uppercase tracking-wider text-right">
+                Unit
+              </p>
+              <p className="text-[10px] font-semibold text-[#A8A39C] uppercase tracking-wider text-right">
                 Subtotal
               </p>
             </div>
             {/* Item rows */}
             {maintenance.items.map((item) => (
-              <div key={item.id} className="grid grid-cols-4 gap-2 py-1.5 border-t border-[#F0EEE8] first:border-t-0">
+              <div key={item.id} className="grid grid-cols-5 gap-2 py-1.5 border-t border-[#F0EEE8] first:border-t-0">
                 <p className="text-[12px] text-[#1A1814] col-span-2 truncate">{item.description}</p>
                 <p className="text-[12px] text-[#6B6760] text-right">{item.quantity}</p>
+                <p className="text-[12px] text-[#6B6760] text-right">
+                  {formatCurrency(item.unitPrice)}
+                </p>
                 <p className="text-[12px] font-semibold text-[#1A1814] text-right">
                   {formatCurrency(item.subtotal)}
                 </p>
               </div>
             ))}
             {/* Total row */}
-            <div className="grid grid-cols-4 gap-2 pt-2 mt-1 border-t border-[#E5E2DA]">
-              <p className="text-[12px] font-semibold text-[#1A1814] col-span-3">Total</p>
+            <div className="grid grid-cols-5 gap-2 pt-2 mt-1 border-t border-[#E5E2DA]">
+              <p className="text-[12px] font-semibold text-[#1A1814] col-span-4">Total</p>
               <p className="text-[12px] font-bold text-amber-600 text-right">
                 {formatCurrency(maintenance.totalPrice)}
               </p>

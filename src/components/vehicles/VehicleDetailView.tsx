@@ -76,7 +76,7 @@ export function VehicleDetailView({ vehicle, defaultTab = "abastecimentos" }: Pr
               Abastecimentos
             </TabsTrigger>
             <TabsTrigger value="manutencao" className="flex-1">
-              Manutenção
+              Manutenções
             </TabsTrigger>
           </TabsList>
           <TabsContent value="abastecimentos">
