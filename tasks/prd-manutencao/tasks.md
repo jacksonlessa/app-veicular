@@ -12,7 +12,7 @@
 - [x] 8.0 `MaintenanceItemRow` + `MaintenanceForm` + Zod schema client-side
 - [x] 9.0 Páginas `/manutencao` (criar) e `/manutencao/[id]` (editar)
 - [x] 10.0 `MaintenanceHistoryList` + aba Manutenções em `VehicleDetailView` + botão no `VehicleCard`
-- [ ] 11.0 Smoke test manual + `validation.md`
+- [x] 11.0 Smoke test manual + `validation.md`
 
 ## Grafo de Dependências
 
